@@ -13,8 +13,7 @@ Server setup done
 
 SERVER INFO:
 Schema Name: uscmissed
-username: root
-password: root
+username and pass depends on your local setup
 
 SERVER DESIGN:
 shown in Server Design.png
