@@ -2,7 +2,7 @@ FIRST TIME SETUP
 Create database setup with ServerSetupGuide.md
 Using Eclipse, open workspace named 
 	uscmissed
-Import Existing Workspace from root directory: uscmissed
+Import General -> Existing Workspace from root directory: uscmissed
 Then follow General Workflow guide below
 
 GENERAL WORKFLOW GUIDE
@@ -12,7 +12,10 @@ Create a new branch with
 	git checkout -b "<branchname>"
 Create Apache Server
 	Right click package explorer -> New -> Other -> Server
-	Select Server Type -> Apache/Tomcat 9.0 -> Finish
+	Select Server Type -> Apache/Tomcat 9.0 
+		Click download and install if it says apache-tomcat-9.0.55
+		Finish
+		If it prompts parent directory, use uscmissed as the parent directory
 	Right click Missed Connections -> Configure build path
 	In class path, delete apache tomcat server library if it exists
 	Click Classpath -> Add Library -> Server Runtime -> Apache-tomcat-9 -> Finish -> Apply and CLose
