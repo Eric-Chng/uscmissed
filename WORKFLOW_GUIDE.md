@@ -2,6 +2,7 @@ FIRST TIME SETUP
 Create database setup with ServerSetupGuide.md
 Using Eclipse, open workspace named 
 	uscmissed
+Import Existing Workspace from root directory: uscmissed
 Then follow General Workflow guide below
 
 GENERAL WORKFLOW GUIDE
