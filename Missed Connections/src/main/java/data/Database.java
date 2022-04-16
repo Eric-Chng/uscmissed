@@ -47,8 +47,74 @@ public class Database {
 		}
 	}
 	
-	public User get_user_data(int user_id) {
+	public String get_user_name(int user_id) {
+		String SELECT_NAME_SQL = "SELECT Name FROM user WHERE user_id = ?";
+		String result = null;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(SELECT_NAME_SQL);
+			statement.setInt(1, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
+	public String get_user_email(int user_id) {
+		String SELECT_NAME_SQL = "SELECT email FROM user WHERE user_id = ?";
+		String result = null;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(SELECT_NAME_SQL);
+			statement.setInt(1, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String get_user_status(int user_id) {
+		String SELECT_NAME_SQL = "SELECT type FROM user WHERE user_id = ?";
+		String result = null;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(SELECT_NAME_SQL);
+			statement.setInt(1, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public User get_user_data(int user_id) {
+		String name = get_user_name(user_id);
+		String email = get_user_email(user_id);
+		String status = get_user_status(user_id);	
+		User res = new User(user_id, name, email, status);
+		return res;
 	}
 	
 	
@@ -154,8 +220,8 @@ public class Database {
 		return post;
 	}
 	
-	public void addPost(Post post){
-		String INSERT_USERS_SQL = "INSERT INTO user (email, name, type) VALUES (?, ?, ?)";
+	public void addPost(Post post, int user_id){
+		String INSERT_USERS_SQL = "INSERT INTO toBeApproved (user_id, content) VALUES (?, ?)";
 		try {
 			// Connect to database
 			Class.forName(DRIVER);
@@ -164,9 +230,8 @@ public class Database {
 			
 			// Insert new user to database
 			PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL);
-			statement.setString(1, user.getEmail());
-			statement.setString(2, user.getName());
-			statement.setString(3, user.getStatus()); //(status -> type) for (backend -> db) mapping
+			statement.setInt(1, user_id);
+			statement.setString(2, post.getPostContent());
 			ResultSet rs = statement.executeQuery();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -178,7 +243,7 @@ public class Database {
 	
 	
 	
-	//END OF CURRENT PAGE
+	//END OF CURRENT PAGE; REST IS TEMPLATE CODE
 	
 	
 	
