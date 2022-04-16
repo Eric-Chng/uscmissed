@@ -10,6 +10,13 @@ First, run
 	git pull
 Create a new branch with 
 	git checkout -b "<branchname>"
+Create Apache Server
+	Right click package explorer -> New -> Other -> Server
+	Select Server Type -> Apache/Tomcat 9.0 -> Finish
+	Right click Missed Connections -> Configure build path
+	In class path, delete apache tomcat server library if it exists
+	Click Classpath -> Add Library -> Server Runtime -> Apache-tomcat-9 -> Finish -> Apply and CLose
+	
 In data/Database.java, change the username and password to your respective username and password for MySQL
 	private static String USER = "root";
 	private static String PASSWORD = "password";
