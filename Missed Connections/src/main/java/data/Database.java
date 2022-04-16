@@ -17,12 +17,12 @@ import util.Restaurant;
 public class Database {
 	
 	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static String ADDRESS = "jdbc:mysql://localhost:3306/sal_eats";
+	private static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
 	private static String USER = "root";
 	private static String PASSWORD = "password";
 	
-	public int registerUser(User user) throws SQLIntegrityConstraintViolationException {
-		String INSERT_USERS_SQL = "INSERT INTO users (email, name, password) VALUES (?, ?, ?)";
+	public int registerUser(User user){
+		String INSERT_USERS_SQL = "INSERT INTO user (email, name) VALUES (?, ?)";
 		int result = 0;
 		try {
 			// Connect to database
@@ -38,9 +38,7 @@ public class Database {
 			result = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
-			if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SQLIntegrityConstraintViolationException();
-			}
+			e.printStackTrace();
 		}
 		return result;
 	}
