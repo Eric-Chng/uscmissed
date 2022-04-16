@@ -9,11 +9,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.io.*;
 import java.util.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
-
 import util.Business;
 import util.Category;
 import util.Location;
@@ -50,27 +45,6 @@ public class Database {
 		return result;
 	}
 	
-	public boolean validate(String email, String password) {
-		String SELECT_USERS_SQL = "SELECT * FROM users WHERE email = ? AND password = ?";
-		boolean status = false;
-		try {
-			// Connect to database
-			Class.forName(DRIVER);
-			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-			
-			// Check if email and password match 
-			PreparedStatement statement = conn.prepareStatement(SELECT_USERS_SQL);
-			statement.setString(1, email);
-			statement.setString(2, password);
-	
-			ResultSet rs = statement.executeQuery();
-			status = rs.next();
-			conn.close();
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return status;
-	}
 	
 	public String getName(String email) {
 		String SELECT_NAME_SQL = "SELECT name FROM users WHERE email = ?";
