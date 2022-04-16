@@ -1,3 +1,33 @@
+# Do not ignore the .gitignore or any of the other files we've bundled in this
+# repository by default. They are intended to remain in your repository.
+
+# We've gone ahead and set up a .gitignore for you. However, as we discussed in
+# the git lab, this won't ignore binaries that don't have the .o extension. You
+# can add rules to ignore those in this file or you can create an additional
+# .gitignore and add the new rule in the relevant subdirectory to what you're
+# working on.
+#
+# You can have a .gitignore in any directory of your repository. If there are
+# multiple, they will all work. Note that paths specified in a .gitignore will
+# always be relative to where the .gitignore is located, so if you want to
+# ignore hw1/executable by putting a .gitignore in hw1/, you would add rule:
+#
+# executable
+#
+# If you wanted to ignore hw1/executable from this file, you'd write the
+# following at the bottom of this file:
+#
+# hw1/executable
+#
+# For more: https://git-scm.com/docs/gitignore
+
+# Windows
+# https://github.com/github/gitignore/blob/master/Global/Windows.gitignore
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
 # macOS
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 .DS_Store
@@ -38,35 +68,5 @@
 *.sublime-workspace
 
 # C++
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
 *.o
-*.obj
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
