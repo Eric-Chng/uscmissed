@@ -10,7 +10,7 @@ First, run
 	git pull
 Create a new branch with 
 	git checkout -b "<branchname>"
-Create Apache Server
+Create Apache Server - ONLY DO THIS IF YOU DO NOT HAVE A SERVER IN ECLIPSE AFTER BRANCHING
 	Right click package explorer -> New -> Other -> Server
 	Select Server Type -> Apache/Tomcat 9.0 
 		Click download and install if it says apache-tomcat-9.0.55
