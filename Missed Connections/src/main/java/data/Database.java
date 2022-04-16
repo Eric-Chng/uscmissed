@@ -1,18 +1,24 @@
 package data;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale.Category;
+import java.util.Map;
 
-import util.Business;
-import util.Category;
-import util.Location;
-import util.Restaurant;
+
+import util.User;
+import util.Post;
+
 
 public class Database {
 	
@@ -21,9 +27,8 @@ public class Database {
 	private static String USER = "root";
 	private static String PASSWORD = "password";
 	
-	public int registerUser(User user){
-		String INSERT_USERS_SQL = "INSERT INTO user (email, name) VALUES (?, ?)";
-		int result = 0;
+	public void registerUser(User user){
+		String INSERT_USERS_SQL = "INSERT INTO user (email, name, type) VALUES (?, ?, ?)";
 		try {
 			// Connect to database
 			Class.forName(DRIVER);
@@ -34,19 +39,22 @@ public class Database {
 			PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL);
 			statement.setString(1, user.getEmail());
 			statement.setString(2, user.getName());
-			statement.setString(3, user.getPassword());
-			result = statement.executeUpdate();
+			statement.setString(3, user.getStatus()); //(status -> type) for (backend -> db) mapping
+			ResultSet rs = statement.executeQuery();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return result;
+	}
+	
+	public User get_user_data(int user_id) {
+	
 	}
 	
 	
-	public String getName(String email) {
-		String SELECT_NAME_SQL = "SELECT name FROM users WHERE email = ?";
-		String result = "User";
+	public String get_post_content(int post_id) {
+		String SELECT_NAME_SQL = "SELECT content FROM posts WHERE post_id = ?";
+		String result = null;
 		try {
 			// Connect to database
 			Class.forName(DRIVER);
@@ -54,16 +62,125 @@ public class Database {
 			
 			// Grab queried name
 			PreparedStatement statement = conn.prepareStatement(SELECT_NAME_SQL);
-			statement.setString(1, email);
+			statement.setInt(1, post_id);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			result = rs.getString("name");
+			result = rs.getString("content");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
+	
+	public ArrayList<String> get_post_comment(int post_id) {
+		String POST_COMMENT_SQL = "SELECT distinct(Comment) FROM comment WHERE post_id = ?";
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(POST_COMMENT_SQL);
+			statement.setInt(1, post_id);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				result.add(rs.getString("Comment"));
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int get_post_likes(int post_id) {
+		String POST_LIKES_SQL = "SELECT count(post_id) AS data FROM likes WHERE post_id = ?";
+		int result = 0;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(POST_LIKES_SQL);
+			statement.setInt(1, post_id);
+			ResultSet rs = statement.executeQuery();
+			result = (rs.getInt("data"));
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public int if_user_liked(int post_id, int user_id) {
+		String POST_LIKES_SQL = "SELECT count(post_id) AS data FROM likes WHERE post_id = ? and user_id = ?";
+		int result = 0;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(POST_LIKES_SQL);
+			statement.setInt(1, post_id);
+			statement.setInt(2, user_id);
+			ResultSet rs = statement.executeQuery();
+			result = (rs.getInt("data"));
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public Post get_post(int post_id, int user_id) {
+		int id = post_id;
+		String content = get_post_content(post_id);
+		ArrayList<String> comments = get_post_comment(post_id);
+		int likes = get_post_likes(post_id);
+		boolean likedByUser;
+		if (if_user_liked(post_id, user_id) == 0) {
+			likedByUser = false;
+		}
+		else {
+			likedByUser = true;
+		}
+		Post post = new Post(id, content, comments, likes, likedByUser);
+		return post;
+	}
+	
+	public void addPost(Post post){
+		String INSERT_USERS_SQL = "INSERT INTO user (email, name, type) VALUES (?, ?, ?)";
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			System.out.println("Database: Creating User");
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Insert new user to database
+			PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL);
+			statement.setString(1, user.getEmail());
+			statement.setString(2, user.getName());
+			statement.setString(3, user.getStatus()); //(status -> type) for (backend -> db) mapping
+			ResultSet rs = statement.executeQuery();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	//END OF CURRENT PAGE
+	
+	
 	
 	
 
