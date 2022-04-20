@@ -239,12 +239,73 @@ public class Database {
 	
 	//Feed Database Functions
 	
-	//TO BE IMPLEMENTED: returns the most recent 100 post to show on the feed as Arraylist<Post>
+	//returns the most recent 100 post to show on the feed as Arraylist<Post>
+	public ArrayList<Post> most_recent_posts(int user_id) {
+		String MOST_RECENT = "SELECT post_id FROM posts ORDER BY post_id DESC LIMIT 100";
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> most_recent_post_id = new ArrayList<Integer>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				most_recent_post_id.add(rs.getInt("content"));
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int post_id : most_recent_post_id) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		return result;
+	}
 	
-	//TO BE IMPLEMENTED: takes in user_id, post_id and increments like counter for associated post (user likes a post)
+	//takes in user_id, post_id and increments like counter for associated post (user likes a post)
+	public void user_liked_post(int post_id, int user_id) {
+		int user_liked = if_user_liked(post_id, user_id); 
+		if (user_liked == 0) {
+			String MOST_RECENT = "INSERT INTO likes (user_id, post_id) VALUES (?, ?)";
+			try {
+				Class.forName(DRIVER);
+				Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+				PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
+				statement.setInt(1, user_id);
+				statement.setInt(2, post_id);
+				ResultSet rs = statement.executeQuery();
+				conn.close();
+			} catch (SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
-	//TO BE IMPLEMENTED: takes in a hashtag (type String) and returns the associated posts as Arraylist<Post>
-	
+	//takes in a hashtag (type String), user_id (type int) and returns the associated posts as Arraylist<Post>
+	public ArrayList<Post> search_hashtag(String search_param, int user_id) {
+		String SEARCH_HASHTAG = "SELECT post_id FROM posts WHERE content LIKE ?";
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> post_id_with_hashtag = new ArrayList<Integer>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(SEARCH_HASHTAG);
+			statement.setString(1, "%"+search_param+"%");
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				post_id_with_hashtag.add(rs.getInt("content"));
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int post_id : post_id_with_hashtag) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		return result;
+	}
 	
 	//Commenting Database Functions
 	
@@ -289,6 +350,8 @@ public class Database {
 	//TO BE IMPLEMENTED: approve function
 	
 	//TO BE IMPLEMENTED: reject function
+	
+	//TO BE IMPLEMENTED: return all to_be_approved posts
 	
 	
 }
