@@ -4,10 +4,18 @@ Open MySQLWorkbench
 Click Server -> Data Import
 In Import from Disk tab,
 	select import from Self-Contained File
-	find the fileServerSetup.sql
+	find the file ServerSetup.sql
+	Select option at the bottom: Dump Structure Only
 	Click start import
-Refresh MySQLWorkbench
 
+Click Server -> Data Import
+In Import from Disk tab,
+	select import from Self-Contained File
+	find file SampleDataPopulate.sql
+	Select option at the bottom: Dump Data Only
+	Click start import
+
+Refresh MySQLWorkbench
 Server setup done
 
 
