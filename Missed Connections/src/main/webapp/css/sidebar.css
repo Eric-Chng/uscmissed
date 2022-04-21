@@ -1,70 +1,100 @@
-@charset "UTF-8";
 @font-face {
-  font-family: bodyFont;
-  src: url(Adagio_Sans-Regular.ttf);
+	font-family: 'Adagio Sans';
+	src: url('Adagio_Sans-Regular.ttf');
+	font-weight: normal;
+	font-style: normal;
 }
 
-body{
-	font-family: bodyFont;
-	background: #FFF7F0;
+body {
 	margin: 0px;
+	background-color: #FFF7F0;
+	color: #D56262;
+	font-family: 'Adagio Sans';
 }
 
-.leftSidebar{
-	width: 25vw;
+#leftSidebar{
+	width: 23vw;
 	position: fixed;
-	border-right: 5px #FBE8D8 solid;
-	height: 110vh;
-	margin: 0px;
+	border-right: 0.4vw #FBE8D8 solid;
+	height: 100%;
+    margin: 0px;
+    overflow-x: hidden;
+    /* float: left; */
 }
 
 img{
-	width: 8vw;
+	width: 10vw;
 	height: auto;
-	margin-left: 8vw;
-	margin-top: 15vh;
+	margin-left: 6.5vw;
+	margin-top: 5vh;
 }
 
-.rightSidebar{
-	width: 25vw;
-	right: 0;
+#rightSidebar{
+	width: 27vw;
 	position: fixed;
-	border-left: 5px #FBE8D8 solid;
-	height: 100vh;
+    border-left: 0.4vw #FBE8D8 solid;
+    height: 100%;
+    margin: 0;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
 }
 
 .link{
-	font-size: 25px;
+	font-size: 1.2em;
 	color: #D56262;
-	margin-left: 6vw;
+	margin-left: 5.5vw;
 	margin-top: 4vh;
+}
+
+.link a {
+    color: #D56262;
+    text-decoration: none;
+}
+
+.link-current {
+    font-size: 1.2em;
+	color: #D56262;
+	margin-left: 5.5vw;
+    margin-top: 3vh;
+    /* text-decoration: underline; */
+    text-shadow:
+    0 0 7px #EE8B8B,
+    0 0 10px #EE8B8B,
+    0 0 21px #fff;
+}
+
+.link-current a {
+    color: #D56262;
+    text-decoration: none;
 }
 
 .submitPost{
 	margin-top: 4vh;
-	font-size: 25px;
+	font-size: 1.2em;
 	margin-left: 5vw;
-	background: #D56262;
-	color: #FBE8D8;
-	border-radius: 25px;
-	text-align: center;
-	vertical-align: middle;
-	line-height: 7vh;
-	top: 50%;
-	width: 16.5vw;
-	height: 7vh;
-}
-
-input[type="text"]{
 	background: #D56262;
 	color: white;
 	border-radius: 25px;
-	height: 5vh;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 6vh;
+	top: 50%;
 	width: 13vw;
-	margin-top: 10vh;
-	margin-left: 5.5vw;
+	height: 6vh;
+}
+
+input[type="text"]{
+    background: #D56262;
+    color: white;
+    font-family: 'Adagio Sans';
+	border-radius: 25px;
+	height: 5vh;
+	width: 16vw;
+    margin-top: 6vh;
+    margin-left: 4.5vw;
 	border: 0;
-	padding-left: 20px;
+    padding-left: 1.5vw;
 }
 
 ::placeholder { 
@@ -75,7 +105,7 @@ input[type="text"]{
 .staticText{
 	margin-top: 5vh;
 	text-align: center;
-	font-size: 30px;
+	font-size: 2em;
 	color: #EE8B8B;
 }
 
@@ -84,3 +114,9 @@ input[type="text"]{
     overflow-y: auto;
 }
 
+#search-button {
+    background-color: transparent;
+    border: 0px;
+    color: #D56262;
+    margin-left: 0.3vw;
+}
