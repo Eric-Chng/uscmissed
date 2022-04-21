@@ -1,0 +1,86 @@
+@charset "UTF-8";
+@font-face {
+  font-family: bodyFont;
+  src: url(Adagio_Sans-Regular.ttf);
+}
+
+body{
+	font-family: bodyFont;
+	background: #FFF7F0;
+	margin: 0px;
+}
+
+.leftSidebar{
+	width: 25vw;
+	position: fixed;
+	border-right: 5px #FBE8D8 solid;
+	height: 110vh;
+	margin: 0px;
+}
+
+img{
+	width: 8vw;
+	height: auto;
+	margin-left: 8vw;
+	margin-top: 15vh;
+}
+
+.rightSidebar{
+	width: 25vw;
+	right: 0;
+	position: fixed;
+	border-left: 5px #FBE8D8 solid;
+	height: 100vh;
+}
+
+.link{
+	font-size: 25px;
+	color: #D56262;
+	margin-left: 6vw;
+	margin-top: 4vh;
+}
+
+.submitPost{
+	margin-top: 4vh;
+	font-size: 25px;
+	margin-left: 5vw;
+	background: #D56262;
+	color: #FBE8D8;
+	border-radius: 25px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 7vh;
+	top: 50%;
+	width: 16.5vw;
+	height: 7vh;
+}
+
+input[type="text"]{
+	background: #D56262;
+	color: white;
+	border-radius: 25px;
+	height: 5vh;
+	width: 13vw;
+	margin-top: 10vh;
+	margin-left: 5.5vw;
+	border: 0;
+	padding-left: 20px;
+}
+
+::placeholder { 
+  color: white;
+  opacity: 1; 
+}
+
+.staticText{
+	margin-top: 5vh;
+	text-align: center;
+	font-size: 30px;
+	color: #EE8B8B;
+}
+
+.trendingContainer{
+	overflow-x: hidden;
+    overflow-y: auto;
+}
+
