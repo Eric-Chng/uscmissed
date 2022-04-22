@@ -14,10 +14,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 import util.User;
 import util.Post;
+import util.TBA;
 
 
 public class Database {
@@ -348,10 +352,92 @@ public class Database {
 	//Admin Approval Database Functions
 	
 	//TO BE IMPLEMENTED: approve function
+	public void approve_post(int approve_id) {
+		String QUERY = "SELECT FROM toBeApproved WHERE approve_id = ?";
+		int user_id = 0;
+		String content = "";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(QUERY);
+			statement.setInt(1, approve_id);
+			ResultSet rs = statement.executeQuery();
+			user_id = rs.getInt("user_id");
+			content = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String DELETE_ENTRY = "DELETE FROM toBeApproved WHERE approve_id = ?";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
+			statement.setInt(1, approve_id);
+			ResultSet rs = statement.executeQuery();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		Date date = new Date();
+		Timestamp curr_timestamp = new Timestamp(date.getTime());
+		
+		String INSERT_INTO_POST = "INSERT INTO posts (user_id, content, post_timestamp) VALUES (?, ?, ?)";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(INSERT_INTO_POST);
+			statement.setInt(1, user_id);
+			statement.setString(2, content);
+			statement.setTimestamp(3, curr_timestamp);
+			ResultSet rs = statement.executeQuery();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	//TO BE IMPLEMENTED: reject function
+	public void reject_post(int approve_id) {
+		String DELETE_ENTRY = "DELETE FROM toBeApproved WHERE approve_id = ?";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
+			statement.setInt(1, approve_id);
+			ResultSet rs = statement.executeQuery();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	//TO BE IMPLEMENTED: return all to_be_approved posts
+	
+	//return all to_be_approved posts as ArrayList<TBA>
+	public ArrayList<TBA> to_be_approved_posts() {
+		String TO_BE_APPROVED = "SELECT approve_id FROM toBeApproved";
+		ArrayList<TBA> result = new ArrayList<TBA>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(TO_BE_APPROVED);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				int approve_id = rs.getInt("approve_id");
+				int user_id = rs.getInt("user_id");
+				String content = rs.getString("content");
+				TBA temp = new TBA(approve_id, user_id, content);	
+				result.add(temp);
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	
 }
