@@ -1,5 +1,7 @@
 package data;
 
+
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -29,7 +31,7 @@ public class Database {
 	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
 	private static String USER = "root";
-	private static String PASSWORD = "password";
+	private static String PASSWORD = "root";
 	
 	
 	//Account Validation Database Functions
@@ -45,7 +47,7 @@ public class Database {
 			statement.setString(1, user.getEmail());
 			statement.setString(2, user.getName());
 			statement.setString(3, user.getStatus()); //(status -> type) for (backend -> db) mapping
-			ResultSet rs = statement.executeQuery();
+			statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -88,7 +90,7 @@ public class Database {
 			statement.setInt(1, user_id);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			result = rs.getString("content");
+			result = rs.getString("email");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -110,7 +112,7 @@ public class Database {
 			statement.setInt(1, user_id);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			result = rs.getString("content");
+			result = rs.getString("type");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -179,6 +181,7 @@ public class Database {
 			PreparedStatement statement = conn.prepareStatement(GET_POST_LIKES);
 			statement.setInt(1, post_id);
 			ResultSet rs = statement.executeQuery();
+			rs.next();
 			result = (rs.getInt("data"));
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -199,6 +202,7 @@ public class Database {
 			statement.setInt(1, post_id);
 			statement.setInt(2, user_id);
 			ResultSet rs = statement.executeQuery();
+			rs.next();
 			result = (rs.getInt("data"));
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -233,7 +237,7 @@ public class Database {
 			PreparedStatement statement = conn.prepareStatement(ADD_POST);
 			statement.setInt(1, user_id);
 			statement.setString(2, post.getPostContent());
-			ResultSet rs = statement.executeQuery();
+			statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -254,7 +258,8 @@ public class Database {
 			PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
-				most_recent_post_id.add(rs.getInt("content"));
+				most_recent_post_id.add(rs.getInt("post_id"));
+				
 			}
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -278,7 +283,7 @@ public class Database {
 				PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
 				statement.setInt(1, user_id);
 				statement.setInt(2, post_id);
-				ResultSet rs = statement.executeQuery();
+				statement.executeUpdate();
 				conn.close();
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -298,7 +303,7 @@ public class Database {
 			statement.setString(1, "%"+search_param+"%");
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
-				post_id_with_hashtag.add(rs.getInt("content"));
+				post_id_with_hashtag.add(rs.getInt("post_id"));
 			}
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -323,7 +328,7 @@ public class Database {
 			statement.setInt(1, user_id);
 			statement.setInt(2, post_id);
 			statement.setString(3, comment);
-			ResultSet rs = statement.executeQuery();
+			int rs = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -333,7 +338,7 @@ public class Database {
 	//Feedback Database Functions
 	
 	//takes category (String), feedback data (String), and email (String) and adds to feedback database
-	public void addComment(String category, String feedback_data, String email){
+	public void addFeedback(String category, String feedback_data, String email){
 		String ADD_FEEDBACK = "INSERT INTO feedback (category, feedback_data, email) VALUES (?, ?, ?)";
 		try {
 			Class.forName(DRIVER);
@@ -342,7 +347,7 @@ public class Database {
 			statement.setString(1, category);
 			statement.setString(2, feedback_data);
 			statement.setString(3, email);
-			ResultSet rs = statement.executeQuery();
+			int rs = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -353,7 +358,7 @@ public class Database {
 	
 	//TO BE IMPLEMENTED: approve function
 	public void approve_post(int approve_id) {
-		String QUERY = "SELECT FROM toBeApproved WHERE approve_id = ?";
+		String QUERY = "SELECT * FROM toBeApproved WHERE approve_id = ?";
 		int user_id = 0;
 		String content = "";
 		try {
@@ -361,13 +366,16 @@ public class Database {
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
 			PreparedStatement statement = conn.prepareStatement(QUERY);
 			statement.setInt(1, approve_id);
+			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
+			rs.next();
 			user_id = rs.getInt("user_id");
 			content = rs.getString("content");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println(content);
 		
 		String DELETE_ENTRY = "DELETE FROM toBeApproved WHERE approve_id = ?";
 		try {
@@ -375,24 +383,24 @@ public class Database {
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
 			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
 			statement.setInt(1, approve_id);
-			ResultSet rs = statement.executeQuery();
+			int rs = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
 		Date date = new Date();
-		Timestamp curr_timestamp = new Timestamp(date.getTime());
+
 		
-		String INSERT_INTO_POST = "INSERT INTO posts (user_id, content, post_timestamp) VALUES (?, ?, ?)";
+		String INSERT_INTO_POST = "INSERT INTO posts (user_id, content) VALUES (?, ?)";
 		try {
 			Class.forName(DRIVER);
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
 			PreparedStatement statement = conn.prepareStatement(INSERT_INTO_POST);
 			statement.setInt(1, user_id);
 			statement.setString(2, content);
-			statement.setTimestamp(3, curr_timestamp);
-			ResultSet rs = statement.executeQuery();
+			System.out.println(statement);
+			int rs = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -408,7 +416,7 @@ public class Database {
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
 			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
 			statement.setInt(1, approve_id);
-			ResultSet rs = statement.executeQuery();
+			int rs = statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -438,6 +446,8 @@ public class Database {
 		}
 		return result;
 	}
+	
+
 	
 	
 }
