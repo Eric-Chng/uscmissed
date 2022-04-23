@@ -22,6 +22,7 @@ body {
 	border-radius: 80px;
 	height: 700px;
 	text-align: center;
+	box-shadow: 5px 5px 10px 2px rgba(0,0,0,0.8);
 }
 .new_post_header {
 	padding-top: 5px;
