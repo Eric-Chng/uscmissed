@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 
 <html>
     <head>
         <title>
-            MissedSC | Homepage
+            MissedSC | Expanded Post
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
         <style>
-            @font-face {
+        	@font-face {
                 font-family: 'Adagio Sans';
                 src: url('Adagio_Sans-Regular.eot');
                 src: local('Adagio Sans'), local('Adagio_Sans-Regular'),
@@ -21,18 +22,7 @@
                 font-weight: normal;
                 font-style: normal;
             }
-            /* @font-face {
-                font-family: 'Adagio Sans';
-                src: url('Adagio_Sans-SemiBold.eot');
-                src: local('Adagio Sans SemiBold'), local('Adagio_Sans-SemiBold'),
-                    url('Adagio_Sans-SemiBold.eot?#iefix') format('embedded-opentype'),
-                    url('Adagio_Sans-SemiBold.woff2') format('woff2'),
-                    url('Adagio_Sans-SemiBold.woff') format('woff'),
-                    url('Adagio_Sans-SemiBold.ttf') format('truetype');
-                font-weight: 600;
-                font-style: normal;
-            } */
-           body {
+        	body {
                margin: 0px;
                background-color: #FFF7F0;
                color: #D56262;
@@ -55,6 +45,9 @@
                margin-right: 10px;
                height: 100%;
                padding: 2vw;
+           }
+           #current-post {
+               margin-bottom: 40px;
            }
            .left-bubble {
                margin-left: 2.6vw;
@@ -113,12 +106,20 @@
                 border: 1vw solid;
                 border-color: #FDBB63 transparent transparent #FDBB63;
             }
-            .submit-box {
+            .submit-button {
                 float: right;
                 font-size: 1.1em;
-                padding: 0.7vw;
-                padding-right: 0;
-                width: 2vw;
+                padding: 10px;
+                padding-right: 0px;
+                width: 30px;
+            }
+            button {
+                color: white;
+                font-size: 1.1em;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                outline: none;
             }
             #submit-button {
                 color: white;
@@ -129,7 +130,7 @@
                 outline: none;
             }
             .like-button {
-                color: #FDBB63;
+                color: #D56262;
                font-size: 1.1em;
                border: none;
                background-color: transparent;
@@ -137,7 +138,7 @@
                outline: none;
             }
             .comment-button {
-                color: #FDBB63;
+                color: #D56262;
                font-size: 1.1em;
                border: none;
                background-color: transparent;
@@ -149,10 +150,15 @@
                 font-size: 1.1em;
                 margin-top: -0.7vw;
                 margin-right: 1.5vw;
-                color: #FDBB63;
+                color: #D56262;
             }
-            #post-content {
-               width: 38vw;
+            #comments-header {
+               font-size: 1.3em;
+               margin-left: 1.5vw;
+               margin-bottom: 1vw;
+            }
+           #comment-content {
+                width: 38vw;
                height: auto;
                border: none;
                outline: none;
@@ -161,8 +167,8 @@
                font-family: 'Adagio Sans';
                font-size: 1em;
                color: white;
-           }
-           #post-content::placeholder {
+            }
+           #comment-content::placeholder {
                 color: white;
            }
         </style>
@@ -177,38 +183,41 @@
             if(user.status=="admin") { %> --%>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
             <%-- <% } %> --%>
-            <div class="submitPost">Submit Post</div>
+            <div class = "submitPost">Submit Post</div>
         </div>
         <div id="main">
             <div id="header">
-                <h1>Home</h1>
+                <h1>Post #</h1>
             </div>
-            <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
-            <div class="left-bubble tri-right left-in">
-                <div class="talktext">
-                    <textarea id="post-content" name="newpost" placeholder="Type your submission here"></textarea>
-                    <div class="submit-box">
-                        <button type="submit" id="submit-button"><i class="fa-regular fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="right-bubble tri-right right-in">
+            <div id="current-post">
+                <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
+                <div class="left-bubble tri-right left-in">
                     <div class="talktext">
-                      <p>This took a surprisingly long amount of time</p>
+                        <p>An existing post's content here !!!!!!!!!!!!!!!!</p>
                     </div>
                 </div>
                 <div class="stats">
                     <table>
                         <tr>
-                            <td>20 <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button>
-                           <!--  <button type="like" class="like-button"><i class="fa-solid fa-heart"></i></button> -->
-                                </td>
+                            <td>20 <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button></td>
                             <td> </td>
                             <td>1 <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
                         </tr>
                     </table>
                 </div>
+            </div>
+            <p id="comments-header">Comments</p>
+            <div class="right-bubble tri-right right-in">
+                <div class="talktext">
+                    <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
+                    <div class="submit-button">
+                        <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="right-bubble tri-right right-in">
+                <div class="talktext">
+                  <p>An existing comment!!!!!!!!!!!!!</p>
             </div>
         </div>
         <div id="rightSidebar">
