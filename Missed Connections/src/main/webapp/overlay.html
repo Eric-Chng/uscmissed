@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>MissedSC | Submit Page</title>
+	<script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
+	<style>
+		.overlay {
+		  height: 100%;
+		  width: 0;
+		  position: fixed;
+		  z-index: 1;
+		  top: 0;
+		  left: 0;
+		  background-color: rgba(0,0,0, 0.75);
+		  overflow-x: hidden;
+		  /*transition: 1s;*/
+		}
+		.overlay-content {
+			color: white;
+			background-color: #EE8B8B;
+			width: 600px;
+			margin: auto;
+			margin-top: 50px;
+			border-radius: 80px;
+			height: 700px;
+			text-align: center;
+		}
+		.new_post_header {
+			padding-top: 5px;
+		}
+		#hashtag_submit_post {
+			width: 500px;
+			border-radius: 300px;
+			height: 10px;
+			padding: 15px;
+			margin-bottom: 20px;
+			background-color: #D56262;
+			border: none;
+			color: white;
+		}
+		::placeholder {
+			color: white;
+		}
+		#post_comment {
+			width: 500px;
+			border-radius: 30px;
+			height: 300px;
+			margin-bottom: 20px;
+			resize: none;
+			padding: 15px;
+			background-color: #D56262;
+			border: none;
+			color: white;
+			text-align: left;
+		}
+		#submit_post_button {
+			background-color: #D56262;
+			margin-right: 35px;
+			color: white;
+			border: none;
+			padding: 8px 12px 8px 12px;
+			border-radius: 300px;
+		}
+		select {
+			color: white;
+		}
+		#post_comment:focus, #hashtag_submit_post:focus {
+			outline:  none !important;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<!-- need to be sure overlay only shows up if person is already logged in with Google  -->
+	<!-- BEGINNING OF OVERLAY DIV --> 
+	<div id="submit_post" class="overlay">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="fa-solid fa-x fa-2x fa-border" style="color: #D56262; float: right; margin: 20px"></i></a>
+		<div class="overlay-content">
+			<div class="new_post_header">
+				<h1>New Post</h1>
+			</div>
+			<form action="Server" method="GET">
+				<div class="submit_post_row">
+					<textarea id="post_comment" placeholder="Write" name="post_comment" required></textarea>
+				</div>
+				<div class="submit_post_row">
+					<input type="text" id="hashtag_submit_post" name="hashtag" placeholder="#CSCI201 #SAL">
+				</div>
+				<div class="submit_post_row" style="text-align:right">
+					<button type="submit" id="submit_post_button">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- END OF OVERLAY DIV --> 
+	
+	<h2>Overlay</h2>
+
+	<!-- This is the exact line of code to change/modify in the left sidebar code. --> 
+	 <div class="submitPost" onclick="openNav()">Submit Post</div>
+
+	<!-- ADD THIS IN OTHER FILES, ENSURES OVERLAY POPS UP WITH CLICK --> 
+	<script>
+		function openNav() {
+		  document.getElementById("submit_post").style.width = "100%";
+		}
+
+		function closeNav() {
+		  document.getElementById("submit_post").style.width = "0%";
+		}
+	</script>
+	<!-- END --> 
+
+</body>
+</html>
