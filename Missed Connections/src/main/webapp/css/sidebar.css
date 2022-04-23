@@ -84,7 +84,7 @@ img{
 	height: 6vh;
 }
 
-input[type="text"]{
+/*input[type="text"]{
     background: #D56262;
     color: white;
     font-family: 'Adagio Sans';
@@ -95,7 +95,7 @@ input[type="text"]{
     margin-left: 4.5vw;
 	border: 0;
     padding-left: 1.5vw;
-}
+}*/
 
 ::placeholder { 
   color: white;
