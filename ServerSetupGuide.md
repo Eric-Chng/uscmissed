@@ -13,6 +13,7 @@ In Import from Disk tab,
 	select import from Self-Contained File
 	find file SampleDataPopulate.sql
 	Select option at the bottom: Dump Data Only
+	Select default target schema: uscmissed (NEED TO CLOSE TAB AND SELECT DATA IMPORT AGAIN)
 	Click start import
 
 Refresh MySQLWorkbench
