@@ -1,63 +1,74 @@
 package data;
 
+
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale.Category;
+import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import util.Business;
-import util.Category;
-import util.Location;
-import util.Restaurant;
+
+import util.User;
+import util.Post;
+import util.TBA;
+
 
 public class Database {
 	
 	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
 	private static String USER = "root";
-	private static String PASSWORD = "password";
+	private static String PASSWORD = "root";
 	
-	public int registerUser(User user){
-		String INSERT_USERS_SQL = "INSERT INTO user (email, name) VALUES (?, ?)";
-		int result = 0;
+	
+	//Account Validation Database Functions
+	
+	//takes user object and add the new user to the users database
+	public void registerUser(User user){
+		String REGISTER_USER = "INSERT INTO user (email, name, type) VALUES (?, ?, ?)";
 		try {
-			// Connect to database
 			Class.forName(DRIVER);
 			System.out.println("Database: Creating User");
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-			
-			// Insert new user to database
-			PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL);
+			PreparedStatement statement = conn.prepareStatement(REGISTER_USER);
 			statement.setString(1, user.getEmail());
 			statement.setString(2, user.getName());
-			statement.setString(3, user.getPassword());
-			result = statement.executeUpdate();
+			statement.setString(3, user.getStatus()); //(status -> type) for (backend -> db) mapping
+			statement.executeUpdate();
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 	
-	
-	public String getName(String email) {
-		String SELECT_NAME_SQL = "SELECT name FROM users WHERE email = ?";
-		String result = "User";
+	//takes in user_id and returns the name of the user as a String
+	public String get_user_name(int user_id) {
+		String GET_USER_NAME = "SELECT Name FROM user WHERE user_id = ?";
+		String result = null;
 		try {
 			// Connect to database
 			Class.forName(DRIVER);
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
 			
 			// Grab queried name
-			PreparedStatement statement = conn.prepareStatement(SELECT_NAME_SQL);
-			statement.setString(1, email);
+			PreparedStatement statement = conn.prepareStatement(GET_USER_NAME);
+			statement.setInt(1, user_id);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			result = rs.getString("name");
+			result = rs.getString("content");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -65,331 +76,379 @@ public class Database {
 		return result;
 	}
 	
+	//takes in user_id and returns the email of the user as a String
+	public String get_user_email(int user_id) {
+		String GET_USER_EMAIL = "SELECT email FROM user WHERE user_id = ?";
+		String result = null;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(GET_USER_EMAIL);
+			statement.setInt(1, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("email");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
-
+	//takes in user_id and returns the status of the user (admin vs user) as a String
+	public String get_user_status(int user_id) {
+		String GET_USER_STATUS = "SELECT type FROM user WHERE user_id = ?";
+		String result = null;
+		try {
+			// Connect to database
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			
+			// Grab queried name
+			PreparedStatement statement = conn.prepareStatement(GET_USER_STATUS);
+			statement.setInt(1, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("type");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
-	public void input_food_db(){
-		Collection<Restaurant> master_data = new ArrayList<Restaurant>();
+	//takes in user_id, returns a User object associated with the passed user_id
+	public User get_user_data(int user_id) {
+		String name = get_user_name(user_id);
+		String email = get_user_email(user_id);
+		String status = get_user_status(user_id);	
+		User res = new User(user_id, name, email, status);
+		return res;
+	}
+	
+	
+	//Posts Database Functions
+	
+	//takes post_id and returns the associated content (user's post) as a string
+	public String get_post_content(int post_id) {
+		String GET_POST_CONTENT = "SELECT content FROM posts WHERE post_id = ?";
+		String result = null;
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(GET_POST_CONTENT);
+			statement.setInt(1, post_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	//takes post_id and returns all the comments as an Arraylist<String>
+	public ArrayList<String> get_post_comment(int post_id) {
+		String GET_POST_COMMENT = "SELECT distinct(Comment) FROM comment WHERE post_id = ?";
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(GET_POST_COMMENT);
+			statement.setInt(1, post_id);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				result.add(rs.getString("Comment"));
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	//takes post_id and returns the number of likes on that post as a int
+	public int get_post_likes(int post_id) {
+		String GET_POST_LIKES = "SELECT count(post_id) AS data FROM likes WHERE post_id = ?";
+		int result = 0;
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(GET_POST_LIKES);
+			statement.setInt(1, post_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = (rs.getInt("data"));
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
 		
-		String file_name = "/Users/rkuan/Desktop/SalEats-main/restaurant_data.json";
-		Gson gson = new Gson();
-		Business temp_bus;
-		try (Reader reader = new FileReader(file_name)) {
-			Map<?, ?> map = gson.fromJson(reader, Map.class);
-			ArrayList<Map<?, ?>> temp_data = (ArrayList<Map<?, ?>>) map.get("businesses");
-			for (Map<?, ?> entry : temp_data) {
-//				System.out.println(entry);
-				Restaurant res = new Restaurant();
-				res.id = (String) entry.get("id");
-				res.name = (String) entry.get("name");
-				res.image_url = (String) entry.get("image_url");
-				res.url = (String) entry.get("url");
-				res.price = (String) entry.get("price");
-				res.review_count = (double) entry.get("review_count");
-				res.rating = (double) entry.get("rating");
-				res.phone = (String) entry.get("phone");
-				
-				Map<?, ?> loc_data = (Map<?, ?>) entry.get("location");
-				Location loc = new Location();
-				loc.address1 = (String) loc_data.get("address1");
-				loc.city = (String) loc_data.get("city");
-				loc.zip_code = (String) loc_data.get("zip_code");
-				res.location = loc.toString();
-				
-				ArrayList<Map<?, ?>> cat_data = (ArrayList<Map<?, ?>>) entry.get("categories");
-				
-				ArrayList<Category> category_data = new ArrayList<Category>();
-				for (Map<?, ?> cat_entry : cat_data) {
-					Category cat = new Category();
-					cat.alias = (String) cat_entry.get("alias");
-					cat.title = (String) cat_entry.get("title");
-					category_data.add(cat);
-//					System.out.println(cat.alias);
-//					System.out.println(cat.title);
-				}
-				res.categories = category_data;
-				
-//				System.out.println(res.id);
-//				System.out.println(res.name);
-//				System.out.println(res.image_url);
-//				System.out.println(res.url);
-//				System.out.println(res.price);
-//				System.out.println(res.review_count);
-//				System.out.println(res.rating);
-//				System.out.println(res.phone);
-//				System.out.println(res.location);
-				
-				master_data.add(res);
-				}
-			
-			for (Restaurant entry : master_data) {
-				//traverse sql database
-				String INSERT_USERS_SQL_1 = "REPLACE INTO sal_eats.Restaurant (restaurant_id, restaurant_name, image_url, address, phone_no, estimated_price, yelp_url, category_name, review_count, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-				String INSERT_USERS_SQL_2 = "REPLACE INTO sal_eats.Category (category_id, category_name,restaurant_id) VALUES (?, ?, ?)";
-				int result = 0;
-//				System.out.println(entry.id);
-//				System.out.println(entry.name);
-//				System.out.println(entry.image_url);
-//				System.out.println(entry.location.toString());
-//				System.out.println(entry.phone);
-//				System.out.println(" ");
-//				System.out.println(entry.url);
-//				System.out.println(" ");
-//				System.out.println(entry.review_count);
-//				System.out.println(entry.rating);
-				
-				try {
-					// Connect to database
-					Class.forName(DRIVER);
-					//System.out.println("Database: Creating Restaurant");
-					Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-					
-					// Insert new user to database
-					PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL_1);
-					statement.setString(1, entry.id);
-					statement.setString(2, entry.name);
-					statement.setString(3, entry.image_url);
-					statement.setString(4, entry.location); //location to string?
-					statement.setString(5, entry.phone);
-					statement.setString(6, entry.price); //estimated price?
-					statement.setString(7, entry.url);
-					statement.setString(8, " "); //category name?
-					statement.setDouble(9, entry.review_count); //convert to double
-					statement.setDouble(10, entry.rating); //convert to double
-					
-					result = statement.executeUpdate();
-					conn.close();
-				} catch (SQLException | ClassNotFoundException e) {
-					if (e instanceof SQLIntegrityConstraintViolationException) {
-						e.printStackTrace();
-					}
-				}
-				
-				for (Category iterate: entry.categories) {
-					String alias = iterate.alias;
-					try {
-						// Connect to database
-						Class.forName(DRIVER);
-						Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-						
-						// Insert new user to database
-						//System.out.println("Database: Creating Category Link");
-						PreparedStatement statement = conn.prepareStatement(INSERT_USERS_SQL_2);
-						statement.setString(1, " ");
-						statement.setString(2, alias);
-						statement.setString(3, entry.id);		
-						result = statement.executeUpdate();
-						conn.close();
-					} catch (SQLException | ClassNotFoundException e) {
-						if (e instanceof SQLIntegrityConstraintViolationException) {
-							e.printStackTrace();
-						}
-					}
-					
-				}
-				
-			//end of function	
-			}
-			
+	}
+	
+	//takes post_id, user_id and determines if the given user has liked the post (0 = NO, 1 = YES)
+	public int if_user_liked(int post_id, int user_id) {
+		String IF_USER_LIKED = "SELECT count(post_id) AS data FROM likes WHERE post_id = ? and user_id = ?";
+		int result = 0;
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(IF_USER_LIKED);
+			statement.setInt(1, post_id);
+			statement.setInt(2, user_id);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			result = (rs.getInt("data"));
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		catch (IOException a){
-			System.out.println(a + "\nFile not found!");
+		return result;
+	}
+	
+	//given post_id and user_id, will return a Post object associated with the passed post_id
+	public Post get_post(int post_id, int user_id) {
+		int id = post_id;
+		String content = get_post_content(post_id);
+		ArrayList<String> comments = get_post_comment(post_id);
+		int likes = get_post_likes(post_id);
+		boolean likedByUser;
+		if (if_user_liked(post_id, user_id) == 0) {
+			likedByUser = false;
 		}
-		catch (JsonParseException b) {
-			System.out.println(b + "\nJson file has syntax errors!");
+		else {
+			likedByUser = true;
+		}
+		Post post = new Post(id, content, comments, likes, likedByUser);
+		return post;
+	}
+	
+	//given a Post object and user_id, add the post to the "to be approved" database
+	public void addPost(Post post, int user_id){
+		String ADD_POST = "INSERT INTO toBeApproved (user_id, content) VALUES (?, ?)";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(ADD_POST);
+			statement.setInt(1, user_id);
+			statement.setString(2, post.getPostContent());
+			statement.executeUpdate();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public List<Restaurant> searchRestaurants(String search_param, String category, String sort){
-		List<Restaurant> res = new ArrayList<Restaurant>();
-		if (category.equals("rest_name")) {
-//			System.out.println("Current: rest_name");
+	
+	//Feed Database Functions
+	
+	//returns the most recent 100 post to show on the feed as Arraylist<Post>
+	public ArrayList<Post> most_recent_posts(int user_id) {
+		String MOST_RECENT = "SELECT post_id FROM posts ORDER BY post_id DESC LIMIT 100";
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> most_recent_post_id = new ArrayList<Integer>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				most_recent_post_id.add(rs.getInt("post_id"));
+				
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int post_id : most_recent_post_id) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		return result;
+	}
+	
+	//takes in user_id, post_id and increments like counter for associated post (user likes a post)
+	public void user_liked_post(int post_id, int user_id) {
+		int user_liked = if_user_liked(post_id, user_id); 
+		if (user_liked == 0) {
+			String MOST_RECENT = "INSERT INTO likes (user_id, post_id) VALUES (?, ?)";
 			try {
-				// Connect to database
 				Class.forName(DRIVER);
 				Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-				String SELECT_STATEMENT_1 = "";
-				// Grab queried name
-				if (sort.equals("price")) {
-//					System.out.println("type: price");
-					SELECT_STATEMENT_1 = "SELECT * FROM sal_eats.Restaurant WHERE Restaurant.restaurant_name LIKE ? and estimated_price is not null ORDER BY estimated_price ASC";
-				}
-				else if (sort.equals("review_count")){
-					SELECT_STATEMENT_1 = "SELECT * FROM sal_eats.Restaurant WHERE Restaurant.restaurant_name LIKE ? and review_count is not null ORDER BY (review_count) * 1 DESC";						
-				}
-				else{
-					SELECT_STATEMENT_1 = "SELECT * FROM sal_eats.Restaurant WHERE Restaurant.restaurant_name LIKE ? and rating is not null ORDER BY rating DESC";						
-				}
-				
-//				System.out.println(SELECT_STATEMENT_1);
-				PreparedStatement statement = conn.prepareStatement(SELECT_STATEMENT_1);
-				statement.setString(1, "%"+search_param+"%");
-				System.out.println(statement);
-	
-				ResultSet rs = statement.executeQuery();
-				
-				int x = 0;
-				while (rs.next()) {
-					x ++;
-					Restaurant temp = new Restaurant();
-					temp.id = rs.getString("restaurant_id");
-					temp.name = rs.getString("restaurant_name");
-					temp.price = rs.getString("estimated_price");
-					temp.rating = rs.getDouble("rating");
-					temp.review_count = rs.getDouble("review_count");
-					temp.url = rs.getString("yelp_url");
-					temp.image_url = rs.getString("image_url");
-					temp.location = rs.getString("address");
-					temp.phone = rs.getString("phone_no");
-					
-//					System.out.println(temp.price);
-					res.add(temp);
-				}
-//				System.out.println(x);
+				PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
+				statement.setInt(1, user_id);
+				statement.setInt(2, post_id);
+				statement.executeUpdate();
 				conn.close();
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
-		else if (category.equals("category")) {
-//			System.out.println("Current: category");
-			try {
-				// Connect to database
-				Class.forName(DRIVER);
-				Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-				String SELECT_STATEMENT_1 = "SELECT distinct(Restaurant.restaurant_id), Restaurant.restaurant_name, Restaurant.image_url, Restaurant.address, Restaurant.phone_no, Restaurant.estimated_price, Restaurant.yelp_url, Restaurant.review_count, Restaurant.rating ";
-				String A = "FROM sal_eats.Category ";
-				String B = "LEFT JOIN sal_eats.Restaurant ON Category.restaurant_id = Restaurant.restaurant_id ";
-				String C = "";
-				String D = "";
-					
-				// Grab queried name
-				if (sort.equals("price")) {
-					C = "WHERE Category.category_name LIKE ? and Category.category_name is not null and estimated_price is not null ";
-					D = "ORDER BY Restaurant.estimated_price ASC";
-				}
-				else if (sort.equals("review_count")){
-					C = "WHERE Category.category_name LIKE ? and Category.category_name is not null and review_count is not null ";
-					D = "ORDER BY (Restaurant.review_count) * 1 DESC";
-					
-				}
-				else{
-					C = "WHERE Category.category_name LIKE ? and Category.category_name is not null and rating is not null ";
-					D = "ORDER BY Restaurant.rating DESC";
-					
-				}
-				String SQL_Statement = SELECT_STATEMENT_1 + A + B + C + D;
-				PreparedStatement statement = conn.prepareStatement(SQL_Statement);
-				statement.setString(1, "%"+search_param+"%");
-				System.out.println(statement);
-	
-				ResultSet rs = statement.executeQuery();
-				
-				int x = 0;
-				while (rs.next()) {
-					x ++;
-					Restaurant temp = new Restaurant();
-					temp.id = rs.getString("restaurant_id");
-					temp.name = rs.getString("restaurant_name");
-					temp.price = rs.getString("estimated_price");
-					temp.rating = rs.getDouble("rating");
-					temp.review_count = rs.getDouble("review_count");
-					temp.url = rs.getString("yelp_url");
-					temp.image_url = rs.getString("image_url");
-					temp.location = rs.getString("address");
-					temp.phone = rs.getString("phone_no");
-					
-//					System.out.println(temp.name);
-					res.add(temp);
-				}
-//				System.out.println(x);
-				conn.close();
-			} catch (SQLException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return res;
 	}
 	
-	public Restaurant find_restaurant_given_ID(String id){
-		Restaurant res = null;
+	//takes in a hashtag (type String), user_id (type int) and returns the associated posts as Arraylist<Post>
+	public ArrayList<Post> search_hashtag(String search_param, int user_id) {
+		String SEARCH_HASHTAG = "SELECT post_id FROM posts WHERE content LIKE ?";
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> post_id_with_hashtag = new ArrayList<Integer>();
 		try {
-			// Connect to database
 			Class.forName(DRIVER);
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-			String SELECT_STATEMENT_1 = "SELECT * from sal_eats.Restaurant where Restaurant.restaurant_id = ? ";
-			PreparedStatement statement = conn.prepareStatement(SELECT_STATEMENT_1);
-			statement.setString(1, id);
-			System.out.println(statement);
-
+			PreparedStatement statement = conn.prepareStatement(SEARCH_HASHTAG);
+			statement.setString(1, "%"+search_param+"%");
 			ResultSet rs = statement.executeQuery();
-			Restaurant temp = new Restaurant();
-			
-			while (rs.next()) {
-				temp.id = rs.getString("restaurant_id");
-				temp.name = rs.getString("restaurant_name");
-				temp.price = rs.getString("estimated_price");
-				temp.rating = rs.getDouble("rating");
-				temp.review_count = rs.getDouble("review_count");
-				temp.url = rs.getString("yelp_url");
-				temp.image_url = rs.getString("image_url");
-				temp.location = rs.getString("address");
-				temp.phone = rs.getString("phone_no");
-				
-				System.out.println(temp.id);
-				System.out.println(temp.name);
-				
+			while(rs.next()) {
+				post_id_with_hashtag.add(rs.getInt("post_id"));
 			}
-			
-//			System.out.println(x);
 			conn.close();
-			Database db = new Database();
-			String categories = db.get_categories(id);
-			
-			temp.categories_display = categories;
-			System.out.println(temp.categories_display);
-			return temp;
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return res;
+		for (int post_id : post_id_with_hashtag) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		return result;
 	}
 	
-	public String get_categories(String id){
-		String res = "";
+	//Commenting Database Functions
+	
+	//takes post_id, user_id, and string and adds them as an entry to the comment database
+	public void addComment(int post_id, int user_id, String comment){
+		String ADD_COMMENT = "INSERT INTO comment (user_id, post_id, Comment) VALUES (?, ?, ?)";
 		try {
-			// Connect to database
 			Class.forName(DRIVER);
 			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
-			String SELECT_STATEMENT_1 = "SELECT distinct(category_name) from sal_eats.Category where Category.restaurant_id = ? ";
-			PreparedStatement statement = conn.prepareStatement(SELECT_STATEMENT_1);
-			statement.setString(1, id);
-			System.out.println(statement);
-
-			ResultSet rs = statement.executeQuery();
-			boolean first = true;
-			
-			while (rs.next()) {
-				String S = rs.getString("category_name");
-				if (first) {
-					first = false;
-					res = res.concat(S);
-				}
-				else {
-					String temp = ", ";
-					String curr = temp.concat(S); 
-					res = res.concat(curr);
-					
-				}
-//				System.out.println(res);
-			}
+			PreparedStatement statement = conn.prepareStatement(ADD_COMMENT);
+			statement.setInt(1, user_id);
+			statement.setInt(2, post_id);
+			statement.setString(3, comment);
+			int rs = statement.executeUpdate();
 			conn.close();
-			return res;
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return res;
-	
 	}
+	
+	//Feedback Database Functions
+	
+	//takes category (String), feedback data (String), and email (String) and adds to feedback database
+	public void addFeedback(String category, String feedback_data, String email){
+		String ADD_FEEDBACK = "INSERT INTO feedback (category, feedback_data, email) VALUES (?, ?, ?)";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(ADD_FEEDBACK);
+			statement.setString(1, category);
+			statement.setString(2, feedback_data);
+			statement.setString(3, email);
+			int rs = statement.executeUpdate();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//Admin Approval Database Functions
+	
+	//TO BE IMPLEMENTED: approve function
+	public void approve_post(int approve_id) {
+		String QUERY = "SELECT * FROM toBeApproved WHERE approve_id = ?";
+		int user_id = 0;
+		String content = "";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(QUERY);
+			statement.setInt(1, approve_id);
+			System.out.println(statement);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			user_id = rs.getInt("user_id");
+			content = rs.getString("content");
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println(content);
+		
+		String DELETE_ENTRY = "DELETE FROM toBeApproved WHERE approve_id = ?";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
+			statement.setInt(1, approve_id);
+			int rs = statement.executeUpdate();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		Date date = new Date();
+
+		
+		String INSERT_INTO_POST = "INSERT INTO posts (user_id, content) VALUES (?, ?)";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(INSERT_INTO_POST);
+			statement.setInt(1, user_id);
+			statement.setString(2, content);
+			System.out.println(statement);
+			int rs = statement.executeUpdate();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//TO BE IMPLEMENTED: reject function
+	public void reject_post(int approve_id) {
+		String DELETE_ENTRY = "DELETE FROM toBeApproved WHERE approve_id = ?";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(DELETE_ENTRY);
+			statement.setInt(1, approve_id);
+			int rs = statement.executeUpdate();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//return all to_be_approved posts as ArrayList<TBA>
+	public ArrayList<TBA> to_be_approved_posts() {
+		String TO_BE_APPROVED = "SELECT approve_id FROM toBeApproved";
+		ArrayList<TBA> result = new ArrayList<TBA>();
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(TO_BE_APPROVED);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				int approve_id = rs.getInt("approve_id");
+				int user_id = rs.getInt("user_id");
+				String content = rs.getString("content");
+				TBA temp = new TBA(approve_id, user_id, content);	
+				result.add(temp);
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+
+	
+	
 }
 	
