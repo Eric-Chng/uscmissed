@@ -8,6 +8,7 @@
 	<script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/sidebar.css">
 	<link rel="stylesheet" href="css/overlay.css">
+	<link rel="stylesheet" href="css/noPostOverlay.css">
 	<style>
 		@font-face {
            font-family: 'Adagio Sans';
@@ -115,7 +116,7 @@
 </head>
 <body>
 	<div id="submit_post" class="overlay">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="fa-solid fa-x fa-2x" style="color: #D56262; float: right; margin: 20px"></i></a>
+		<a href="javascript:void(0)" class="closebtn" onclick="closeValidNav()"><i class="fa-solid fa-x fa-2x" style="color: #D56262; float: right; margin: 20px"></i></a>
 		<div class="overlay-content">
 			<div class="new_post_header">
 				<h1>New Post</h1>
@@ -133,6 +134,15 @@
 			</form>
 		</div>
 	</div>
+	
+	<div id="noSubmitPost" class="overlay">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeInvalidNav()"><i class="fa-solid fa-x fa-2x" style="color: #D56262; float: right; margin: 20px"></i></a>
+		<div class="noPost-overlay-content">
+			<!-- <h1 style="padding-top:45px">Please log in to post.</h1> -->
+			<h1 style="padding-top:30px">Please log in to post.</h1>
+			<i class="fa-solid fa-face-frown fa-lg"></i>
+		</div>
+	</div>
 	<!-- END OF OVERLAY --> 
 
 	<div id="page_body">
@@ -142,7 +152,16 @@
 		        <div class="link"><a href="homepage.jsp">Home</a></div>
 		        <div class="link" id ="signin">Account Login</div>
 		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
-		        <div class="submitPost" onclick="openNav()">Submit Post</div>
+		        <%
+		        	int x=0;
+		        	if (x==1) {
+		        		out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
+		        	}
+		        	else {
+		        		out.println("<div class='submitPost' onclick='openInvalidNav()'>Submit Post</div>");
+		        	}
+		        %>
+		        
 		    <!-- </div> -->
 		</div>
 		<!-- different div for left column/sidebar -->
@@ -211,12 +230,17 @@
 	</div>
 
 	<script>
-		function openNav() {
+		function openValidNav() {
 		  document.getElementById("submit_post").style.width = "100%";
 		}
-
-		function closeNav() {
+		function closeValidNav() {
 		  document.getElementById("submit_post").style.width = "0%";
+		}
+		function openInvalidNav() {
+			document.getElementById("noSubmitPost").style.width = "100%";
+		}
+		function closeInvalidNav() {
+			document.getElementById("noSubmitPost").style.width = "0%";
 		}
 	</script>
 </body>
