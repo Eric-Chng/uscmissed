@@ -1,0 +1,33 @@
+body {
+    color: #7F7F7F;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    margin: 20px;
+}
+#saleats {
+	font-family: 'Lobster', cursive;
+	color: red;
+	float: left;
+	font-size: 2em;
+	height: 80px;
+}
+#saleats a {
+	color: red;
+	text-decoration: none;
+}
+
+.links {
+	float:right;
+	height: 80px;
+	line-height: 50px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.links a {
+	color: gray;
+	text-decoration: none;
+}
+
+.img {
+	border-radius:25px;
+}
