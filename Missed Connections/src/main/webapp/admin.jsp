@@ -117,13 +117,14 @@
                     <table>
                         <tr>
                             <td>
-                                <button type="approve"><i class="fa-regular fa-heart"></i></button>
+                                <button type="submit"><i class="fa-regular fa-heart"></i></button>
+                                <!-- pass post_id and boolean (1=approved, 0=deleted) back to servlet -->
                             </td>
                             <td>
                                 <p>Approve</p>
                             </td>
                             <td>
-                                <button type="delete"><i class="fa-solid fa-x"></i></button>
+                                <button type="submit"><i class="fa-solid fa-x"></i></button>
                             </td>
                             <td>
                                 <p>Delete</p>
