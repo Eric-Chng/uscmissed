@@ -185,41 +185,65 @@
             <%-- <% } %> --%>
             <div class = "submitPost">Submit Post</div>
         </div>
+        <% int id = (int) request.getAttribute("id");
+    	   String content = (String) request.getAttribute("content");
+    	   int likes = (int) request.getAttribute("likes");
+    	   int comments = (int) request.getAttribute("comments");
+    	   ArrayList<String> mycomments = (ArrayList<String>) request.getAttribute("mycomments");
+    	   boolean ifliked = (boolean) request.getAttribute("ifliked");%>
         <div id="main">
             <div id="header">
-                <h1>Post #</h1>
+                <h1>Post #<%=id %></h1>
             </div>
+            
             <div id="current-post">
                 <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
                 <div class="left-bubble tri-right left-in">
                     <div class="talktext">
-                        <p>An existing post's content here !!!!!!!!!!!!!!!!</p>
+                        <p><%=content %></p>
                     </div>
                 </div>
+                
+                <form action="/Like" method="POST">
                 <div class="stats">
                     <table>
                         <tr>
-                            <td>20 <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button></td>
+                            <td><%=likes %>
+                            <% if(ifliked==true) { %>
+                           		<button type="submit" class="like-button"><i class="fa-solid fa-heart"></i></button>
+                                <% } else { %>
+                                <button type="submit" class="like-button"><i class="fa-regular fa-heart"></i></button>
+                                <% } %>
+                                </td>
                             <td> </td>
-                            <td>1 <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
+                            <td><%=comments %> <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
                         </tr>
                     </table>
                 </div>
-            </div>
+                </form>
+                
+           	</div>
+           	
             <p id="comments-header">Comments</p>
-            <div class="right-bubble tri-right right-in">
-                <div class="talktext">
-                    <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
-                    <div class="submit-button">
-                        <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="right-bubble tri-right right-in">
-                <div class="talktext">
-                  <p>An existing comment!!!!!!!!!!!!!</p>
-            </div>
+            <form action="/ViewPost" method="GET">
+	           <div class="right-bubble tri-right right-in">
+	               <div class="talktext">
+	                   <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
+	                   <div class="submit-button">
+	                       <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+	                   </div>
+	               </div>
+	           </div>
+	        </form>
+	        
+	        <%for(int i=0; i<comments; ++i) { %>
+	            <div class="right-bubble tri-right right-in">
+	                <div class="talktext">
+	                  <p><%= mycomments.get(i) %></p>
+	            </div>
+           <% } %>
         </div>
+        
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>
@@ -227,5 +251,6 @@
                 <div class = "post"></div>
             </div>
         </div>
+        
     </body>
 </html>

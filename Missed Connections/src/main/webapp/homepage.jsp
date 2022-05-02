@@ -168,15 +168,28 @@
         </style>
     </head>
     <body>
+    	<% Cookie[] cookies = request.getCookies();
+   			String newname = "";
+  			boolean isLoggedIn = false;
+   			if(cookies!=null) { 
+   	   			for(Cookie aCookie : cookies) {
+   	   				if(aCookie.getName().equals("username")) {
+   	   					isLoggedIn = true; 
+   	   					break;
+   	   				}
+   	   			}
+   			} 
+   			User myuser = request.getAttribute("user"); 
+   		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
             <div class="link" id ="signin">Account Login</div>
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
-            <%-- <%
-            if(user.status=="admin") { %> --%>
+            <%
+            if(isLoggedIn == true && user.status=="admin") { %>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
-            <%-- <% } %> --%>
+            <% } %>
             <div class="submitPost">Submit Post</div>
         </div>
         <div id="main">
@@ -192,24 +205,43 @@
                     </div>
                 </div>
             </div>
-            <div class="post">
-                <div class="right-bubble tri-right right-in">
-                    <div class="talktext">
-                      <p>This took a surprisingly long amount of time</p>
-                    </div>
-                </div>
-                <div class="stats">
-                    <table>
-                        <tr>
-                            <td>20 <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button>
-                           <!--  <button type="like" class="like-button"><i class="fa-solid fa-heart"></i></button> -->
-                                </td>
-                            <td> </td>
-                            <td>1 <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <% ArrayList<Post> myposts = (ArrayList<Post>)request.getAttribute("posts");
+            	if(myposts.isEmpty() == false) {
+            		for(int i=0; i<myposts.size(); ++i) { 
+            			int postid = myposts.get(i).post_id;
+            			String postcontent = myposts.get(i).postContent;
+            			int likes = myposts.get(i).likes;
+            			int comments = myposts.get(i).comments.size();
+            			ArrayList<String> mycomments = (ArrayList<String)>myposts.get(i).comments;
+            			boolean ifliked = myposts.get(i).likedByUser;
+            		%>
+		            <div class="post">
+		            	<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><%=postid %></a>
+		                <div class="right-bubble tri-right right-in">
+		                    <div class="talktext">
+		                      <p><%=postcontent %></p>
+		                    </div>
+		                </div>
+		                <div class="stats">
+		                    <table>
+		                        <tr>
+		                            <td><%=likes %>
+		                            <% if(ifliked==true) { %>
+		                           		<button type="like" class="like-button"><i class="fa-solid fa-heart"></i></button>
+		                                <% } else { %>
+		                                <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button>
+		                                <% } %>
+		                                </td>
+		                            <td> </td>
+		                            <td><%=comments %> <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </div>
+	            	<% } %>
+	            <% } else if (myposts.isEmpty == true){ %>
+	            <p>No posts currently</p>
+	            <% } %>
         </div>
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
