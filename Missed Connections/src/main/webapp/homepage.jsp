@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.*" %>
+<%@page import="util.Post" %>
+<%@page import="util.User" %>
 <!DOCTYPE html>
 
 <html>
@@ -180,7 +183,7 @@
    	   				}
    	   			}
    			} 
-   			User myuser = request.getAttribute("user"); 
+   			User myuser = (User) request.getAttribute("user"); 
    		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
@@ -220,7 +223,7 @@
             			String postcontent = myposts.get(i).postContent;
             			int likes = myposts.get(i).likes;
             			int comments = myposts.get(i).comments.size();
-            			ArrayList<String> mycomments = (ArrayList<String)>myposts.get(i).comments;
+            			ArrayList<String> mycomments = (ArrayList<String>)myposts.get(i).comments;
             			boolean ifliked = myposts.get(i).likedByUser;
             		%>
 		            <div class="post">
@@ -247,7 +250,7 @@
 		                </div>
 		            </div>
 	            	<% } %>
-	            <% } else if (myposts.isEmpty == true){ %>
+	            <% } else if (myposts.isEmpty() == true){ %>
 	            <p>No posts currently</p>
 	            <% } %>
         </div>
