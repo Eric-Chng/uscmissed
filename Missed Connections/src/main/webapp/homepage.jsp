@@ -9,6 +9,7 @@
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
+        <%@ page import="java.util.ArrayList" %>
         <style>
             @font-face {
                 font-family: 'Adagio Sans';
@@ -184,10 +185,17 @@
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <div class="link" id ="signin">Account Login</div>
+            <% if (isLoggedIn == false) { %>
+            <div class="customGPlusSignIn" id="signin">Account Login</div>
+            <% } else if (isLoggedIn == true){ %>
+            	<form action="LogoutDispatcher" method="GET">
+            		<button type="submit" id="logout" value="log out">Log out</button>
+            	</form>
+            <% } %>
+            
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%
-            if(isLoggedIn == true && user.status=="admin") { %>
+            if(isLoggedIn == true && myuser.status=="admin") { %>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
             <% } %>
             <div class="submitPost">Submit Post</div>
@@ -227,13 +235,13 @@
 		                        <tr>
 		                            <td><%=likes %>
 		                            <% if(ifliked==true) { %>
-		                           		<button type="like" class="like-button"><i class="fa-solid fa-heart"></i></button>
+		                           		<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-solid fa-heart"></i></button></a>
 		                                <% } else { %>
-		                                <button type="like" class="like-button"><i class="fa-regular fa-heart"></i></button>
+		                                <a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-regular fa-heart"></i></button></a>
 		                                <% } %>
 		                                </td>
 		                            <td> </td>
-		                            <td><%=comments %> <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
+		                            <td><%=comments %><i class="fa-regular fa-comments"></i></td>
 		                        </tr>
 		                    </table>
 		                </div>

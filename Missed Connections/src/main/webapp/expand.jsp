@@ -204,7 +204,7 @@
                     </div>
                 </div>
                 
-                <form action="/Like" method="POST">
+                <form action="Like" method="POST">
                 <div class="stats">
                     <table>
                         <tr>
@@ -212,11 +212,11 @@
                             <% if(ifliked==true) { %>
                            		<button type="submit" class="like-button"><i class="fa-solid fa-heart"></i></button>
                                 <% } else { %>
-                                <button type="submit" class="like-button"><i class="fa-regular fa-heart"></i></button>
+                                <i class="fa-regular fa-heart"></i>
                                 <% } %>
                                 </td>
                             <td> </td>
-                            <td><%=comments %> <button type="comment" class="comment-button"><i class="fa-regular fa-comments"></i></button></td>
+                            <td><%=comments %><i class="fa-regular fa-comments"></i></td>
                         </tr>
                     </table>
                 </div>
@@ -225,7 +225,7 @@
            	</div>
            	
             <p id="comments-header">Comments</p>
-            <form action="/ViewPost" method="GET">
+            <form action="Comment" method="POST">
 	           <div class="right-bubble tri-right right-in">
 	               <div class="talktext">
 	                   <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
