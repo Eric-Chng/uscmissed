@@ -1,9 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <html>
     <head>
         <title>
-            MissedSC Admin Review
+            MissedSC | Admin Review
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
@@ -95,6 +97,10 @@
             <div class="link"><a href="homepage.jsp">Home</a></div>
             <div class="link" id ="signin">Account Login</div>
             <div class="link"><a href="contactus.jsp">Contact Us</a></div>
+            <%-- <%
+            if(user.status=="admin") { %> --%>
+            	<div class="link-current"><a href="admin.jsp">Admin Review</a></div>
+            <%-- <% } %> --%>
             <div class = "submitPost">Submit Post</div>
         </div>
         <div id="main">
@@ -111,13 +117,14 @@
                     <table>
                         <tr>
                             <td>
-                                <button type="approve"><i class="fa-regular fa-heart"></i></button>
+                                <button type="submit"><i class="fa-regular fa-heart"></i></button>
+                                <!-- pass post_id and boolean (1=approved, 0=deleted) back to servlet -->
                             </td>
                             <td>
                                 <p>Approve</p>
                             </td>
                             <td>
-                                <button type="delete"><i class="fa-solid fa-x"></i></button>
+                                <button type="submit"><i class="fa-solid fa-x"></i></button>
                             </td>
                             <td>
                                 <p>Delete</p>

@@ -1,17 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 
 <html>
     <head>
         <title>
-            MissedSC | Homepage
+            MissedSC | Expanded Post
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
-        <%@ page import="java.util.ArrayList" %>
         <style>
-            @font-face {
+        	@font-face {
                 font-family: 'Adagio Sans';
                 src: url('Adagio_Sans-Regular.eot');
                 src: local('Adagio Sans'), local('Adagio_Sans-Regular'),
@@ -22,18 +22,7 @@
                 font-weight: normal;
                 font-style: normal;
             }
-            /* @font-face {
-                font-family: 'Adagio Sans';
-                src: url('Adagio_Sans-SemiBold.eot');
-                src: local('Adagio Sans SemiBold'), local('Adagio_Sans-SemiBold'),
-                    url('Adagio_Sans-SemiBold.eot?#iefix') format('embedded-opentype'),
-                    url('Adagio_Sans-SemiBold.woff2') format('woff2'),
-                    url('Adagio_Sans-SemiBold.woff') format('woff'),
-                    url('Adagio_Sans-SemiBold.ttf') format('truetype');
-                font-weight: 600;
-                font-style: normal;
-            } */
-           body {
+        	body {
                margin: 0px;
                background-color: #FFF7F0;
                color: #D56262;
@@ -56,6 +45,9 @@
                margin-right: 10px;
                height: 100%;
                padding: 2vw;
+           }
+           #current-post {
+               margin-bottom: 40px;
            }
            .left-bubble {
                margin-left: 2.6vw;
@@ -114,12 +106,20 @@
                 border: 1vw solid;
                 border-color: #FDBB63 transparent transparent #FDBB63;
             }
-            .submit-box {
+            .submit-button {
                 float: right;
                 font-size: 1.1em;
-                padding: 0.7vw;
-                padding-right: 0;
-                width: 2vw;
+                padding: 10px;
+                padding-right: 0px;
+                width: 30px;
+            }
+            button {
+                color: white;
+                font-size: 1.1em;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                outline: none;
             }
             #submit-button {
                 color: white;
@@ -130,7 +130,7 @@
                 outline: none;
             }
             .like-button {
-                color: #FDBB63;
+                color: #D56262;
                font-size: 1.1em;
                border: none;
                background-color: transparent;
@@ -138,7 +138,7 @@
                outline: none;
             }
             .comment-button {
-                color: #FDBB63;
+                color: #D56262;
                font-size: 1.1em;
                border: none;
                background-color: transparent;
@@ -150,10 +150,15 @@
                 font-size: 1.1em;
                 margin-top: -0.7vw;
                 margin-right: 1.5vw;
-                color: #FDBB63;
+                color: #D56262;
             }
-            #post-content {
-               width: 38vw;
+            #comments-header {
+               font-size: 1.3em;
+               margin-left: 1.5vw;
+               margin-bottom: 1vw;
+            }
+           #comment-content {
+                width: 38vw;
                height: auto;
                border: none;
                outline: none;
@@ -162,95 +167,83 @@
                font-family: 'Adagio Sans';
                font-size: 1em;
                color: white;
-           }
-           #post-content::placeholder {
+            }
+           #comment-content::placeholder {
                 color: white;
            }
         </style>
     </head>
     <body>
-    	<% Cookie[] cookies = request.getCookies();
-   			String newname = "";
-  			boolean isLoggedIn = false;
-   			if(cookies!=null) { 
-   	   			for(Cookie aCookie : cookies) {
-   	   				if(aCookie.getName().equals("username")) {
-   	   					isLoggedIn = true; 
-   	   					break;
-   	   				}
-   	   			}
-   			} 
-   			User myuser = request.getAttribute("user"); 
-   		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <% if (isLoggedIn == false) { %>
-            <div class="customGPlusSignIn" id="signin">Account Login</div>
-            <% } else if (isLoggedIn == true){ %>
-            	<form action="LogoutDispatcher" method="GET">
-            		<button type="submit" id="logout" value="log out">Log out</button>
-            	</form>
-            <% } %>
-            
+            <div class="link" id ="signin">Account Login</div>
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
-            <%
-            if(isLoggedIn == true && myuser.status=="admin") { %>
+            <%-- <%
+            if(user.status=="admin") { %> --%>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
-            <% } %>
-            <div class="submitPost">Submit Post</div>
+            <%-- <% } %> --%>
+            <div class = "submitPost">Submit Post</div>
         </div>
+        <% int id = (int) request.getAttribute("id");
+    	   String content = (String) request.getAttribute("content");
+    	   int likes = (int) request.getAttribute("likes");
+    	   int comments = (int) request.getAttribute("comments");
+    	   ArrayList<String> mycomments = (ArrayList<String>) request.getAttribute("mycomments");
+    	   boolean ifliked = (boolean) request.getAttribute("ifliked");%>
         <div id="main">
             <div id="header">
-                <h1>Home</h1>
+                <h1>Post #<%=id %></h1>
             </div>
-            <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
-            <div class="left-bubble tri-right left-in">
-                <div class="talktext">
-                    <textarea id="post-content" name="newpost" placeholder="Type your submission here"></textarea>
-                    <div class="submit-box">
-                        <button type="submit" id="submit-button"><i class="fa-regular fa-paper-plane"></i></button>
+            
+            <div id="current-post">
+                <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
+                <div class="left-bubble tri-right left-in">
+                    <div class="talktext">
+                        <p><%=content %></p>
                     </div>
                 </div>
-            </div>
-            <% ArrayList<Post> myposts = (ArrayList<Post>)request.getAttribute("posts");
-            	if(myposts.isEmpty() == false) {
-            		for(int i=0; i<myposts.size(); ++i) { 
-            			int postid = myposts.get(i).post_id;
-            			String postcontent = myposts.get(i).postContent;
-            			int likes = myposts.get(i).likes;
-            			int comments = myposts.get(i).comments.size();
-            			ArrayList<String> mycomments = (ArrayList<String)>myposts.get(i).comments;
-            			boolean ifliked = myposts.get(i).likedByUser;
-            		%>
-		            <div class="post">
-		            	<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><%=postid %></a>
-		                <div class="right-bubble tri-right right-in">
-		                    <div class="talktext">
-		                      <p><%=postcontent %></p>
-		                    </div>
-		                </div>
-		                <div class="stats">
-		                    <table>
-		                        <tr>
-		                            <td><%=likes %>
-		                            <% if(ifliked==true) { %>
-		                           		<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-solid fa-heart"></i></button></a>
-		                                <% } else { %>
-		                                <a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-regular fa-heart"></i></button></a>
-		                                <% } %>
-		                                </td>
-		                            <td> </td>
-		                            <td><%=comments %><i class="fa-regular fa-comments"></i></td>
-		                        </tr>
-		                    </table>
-		                </div>
-		            </div>
-	            	<% } %>
-	            <% } else if (myposts.isEmpty == true){ %>
-	            <p>No posts currently</p>
-	            <% } %>
+                
+                <form action="Like" method="POST">
+                <div class="stats">
+                    <table>
+                        <tr>
+                            <td><%=likes %>
+                            <% if(ifliked==true) { %>
+                           		<button type="submit" class="like-button"><i class="fa-solid fa-heart"></i></button>
+                                <% } else { %>
+                                <i class="fa-regular fa-heart"></i>
+                                <% } %>
+                                </td>
+                            <td> </td>
+                            <td><%=comments %><i class="fa-regular fa-comments"></i></td>
+                        </tr>
+                    </table>
+                </div>
+                </form>
+                
+           	</div>
+           	
+            <p id="comments-header">Comments</p>
+            <form action="Comment" method="POST">
+	           <div class="right-bubble tri-right right-in">
+	               <div class="talktext">
+	                   <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
+	                   <div class="submit-button">
+	                       <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+	                   </div>
+	               </div>
+	           </div>
+	        </form>
+	        
+	        <%for(int i=0; i<comments; ++i) { %>
+	            <div class="right-bubble tri-right right-in">
+	                <div class="talktext">
+	                  <p><%= mycomments.get(i) %></p>
+	            </div>
+           <% } %>
         </div>
+        
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>
@@ -258,5 +251,6 @@
                 <div class = "post"></div>
             </div>
         </div>
+        
     </body>
 </html>
