@@ -25,11 +25,8 @@ public class LogoutDispatcher extends HttpServlet {
             throws IOException {
         // TODO Remove userID cookie
     	for(Cookie cookie : request.getCookies()) {
-    		if(cookie.getName().equals("username")) { 
-    			cookie.setMaxAge(0); 
-    			response.addCookie(cookie);
-    			break;
-    		}
+    		cookie.setMaxAge(0); 
+    		response.addCookie(cookie);
     	}
     	response.sendRedirect("homepage.jsp");
     }
