@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import util.*;
 import data.*;
 
 
@@ -36,6 +35,7 @@ public class GoogleDispatcher extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
         String name = (String)request.getParameter("name");
+        name = name.replaceAll("=", " ");
         String email =(String) request.getParameter("email");
         //String password = (String) request.getParameter("type");
         
