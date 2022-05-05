@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.Database;
+
 /**
  * Servlet implementation class ContactServlet
  */
@@ -37,6 +39,12 @@ public class ContactServlet extends HttpServlet {
 		System.out.println(email);
 		System.out.println(reason);
 		System.out.println(content);
+		
+		Database db = new Database();
+		
+		db.addFeedback(reason, content, email);
+		
+		request.getRequestDispatcher("/homepage.jsp").forward(request, response);
 		
 	}
 
