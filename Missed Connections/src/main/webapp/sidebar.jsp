@@ -27,7 +27,7 @@
     auth2.attachClickHandler(element, {},
         function(googleUser) {
     	  var email = googleUser.getBasicProfile().getEmail();
-    	  var name = googleUser.getBasicProfile().getName().split(' ').join('+');
+    	  var name = googleUser.getBasicProfile().getName().split(' ').join('=');
     	  var url = email.substring(email.indexOf('@') + 1);
 		  if(url != "usc.edu"){
 			  alert("The account you used is not a USC email. Please sign in with your USC email.");
@@ -35,9 +35,7 @@
 			  auth2.disconnect();
 		  }
 		  else {
-		  	   document.cookie = "useremail=" + email;
-		  	   document.cookie = "username=" + name;
-			   window.location = "GoogleDispatcher";
+		  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
 		  }
         }, function(error) {
            alert("Sign in not completed, please try again.");
