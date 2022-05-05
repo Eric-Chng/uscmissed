@@ -39,6 +39,7 @@ body {
 }
 ::placeholder {
 	color: white;
+	font-family: 'Adagio Sans';
 }
 #post_comment {
 	width: 500px;
@@ -52,7 +53,7 @@ body {
 	color: white;
 	text-align: left;
 }
-#submit_post_button {
+#submit_post_button, #reset_post_button {
 	background-color: #D56262;
 	margin-right: 35px;
 	color: white;
@@ -66,4 +67,5 @@ select {
 #post_comment:focus, #hashtag_submit_post:focus {
 	outline:  none !important;
 	color: white;
+	font-family: 'Adagio Sans';
 }
