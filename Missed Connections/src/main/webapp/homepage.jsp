@@ -9,6 +9,45 @@
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
+        
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
+		  <script src="https://apis.google.com/js/api:client.js"></script>
+		 <script>
+		  var googleUser = {};
+		  var startApp = function() {
+		    gapi.load('auth2', function(){
+		      // Retrieve the singleton for the GoogleAuth library and set up the client.
+		      auth2 = gapi.auth2.init({
+		        client_id: '424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com',
+		        cookiepolicy: 'single_host_origin',
+		      });
+		      attachSignin(document.getElementById('signin'));
+		    });
+		  };
+		
+		  function attachSignin(element) {
+		    auth2.attachClickHandler(element, {},
+		        function(googleUser) {
+		    	  var email = googleUser.getBasicProfile().getEmail();
+		    	  var name = googleUser.getBasicProfile().getName().split(' ').join('+');
+		    	  var url = email.substring(email.indexOf('@') + 1);
+				  if(url != "usc.edu"){
+					  alert("The account you used is not a USC email. Please sign in with your USC email.");
+					  var auth2 = gapi.auth2.getAuthInstance();
+					  auth2.disconnect();
+				  }
+				  else {
+				  	   document.cookie = "useremail=" + email;
+				  	   document.cookie = "username=" + name;
+					   window.location = "GoogleDispatcher";
+				  }
+		        }, function(error) {
+		           alert("Sign in not completed, please try again.");
+		        });
+		  }
+		  </script>
+        
         <%@ page import="java.util.ArrayList" %>
         <style>
             @font-face {
@@ -169,25 +208,32 @@
         </style>
     </head>
     <body>
-    	<% Cookie[] cookies = request.getCookies();
-   			String newname = "";
-  			boolean isLoggedIn = false;
-   			if(cookies!=null) { 
-   	   			for(Cookie aCookie : cookies) {
-   	   				if(aCookie.getName().equals("username")) {
-   	   					isLoggedIn = true; 
-   	   					break;
-   	   				}
-   	   			}
-   			} 
-   			User myuser = request.getAttribute("user"); 
+    	<% int userid = -1;
+			String username = "";
+			String useremail = "";
+			String usertype = "";
+			Cookie cookies[] = request.getCookies();
+			for (Cookie c : cookies) {
+				if (c.getName().equals("userid")) {
+					userid = Integer.parseInt(c.getValue().trim());
+				}
+				if (c.getName().equals("username")) {
+					username = c.getValue().trim();
+				}
+				if (c.getName().equals("useremail")) {
+					useremail = c.getValue().trim();
+				}
+				if (c.getName().equals("usertype")) {
+					usertype = c.getValue().trim();
+				}
+			}
    		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <% if (isLoggedIn == false) { %>
+            <% if (userid == -1) { %>
             <div class="customGPlusSignIn" id="signin">Account Login</div>
-            <% } else if (isLoggedIn == true){ %>
+            <% } else if (userid != -1){ %>
             	<form action="LogoutDispatcher" method="GET">
             		<button type="submit" id="logout" value="log out">Log out</button>
             	</form>
@@ -195,7 +241,7 @@
             
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%
-            if(isLoggedIn == true && myuser.status=="admin") { %>
+            if(userid == -1 && usertype=="admin") { %>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
             <% } %>
             <div class="submitPost">Submit Post</div>
