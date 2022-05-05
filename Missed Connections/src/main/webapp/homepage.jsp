@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.*" %>
+<%@page import="util.Post" %>
+<%@page import="util.User" %>
 <!DOCTYPE html>
 
 <html>
@@ -45,10 +48,6 @@
 		        });
 		  }
 		  </script>
-        <%@page import="java.util.*" %>
-		<%@page import="util.Post" %>
-		<%@page import="util.User" %>
-        <%@ page import="java.util.ArrayList" %>
         <style>
             @font-face {
                 font-family: 'Adagio Sans';
@@ -212,7 +211,7 @@
 			String username = "";
 			String useremail = "";
 			String usertype = "";
-			Cookie cookies[] = request.getCookies();
+			Cookie[] cookies = request.getCookies();
 			for (Cookie c : cookies) {
 				if (c.getName().equals("userid")) {
 					userid = Integer.parseInt(c.getValue().trim());
@@ -266,7 +265,7 @@
             			String postcontent = myposts.get(i).postContent;
             			int likes = myposts.get(i).likes;
             			int comments = myposts.get(i).comments.size();
-            			ArrayList<String> mycomments = (ArrayList<String)>myposts.get(i).comments;
+            			ArrayList<String> mycomments = (ArrayList<String>)myposts.get(i).comments;
             			boolean ifliked = myposts.get(i).likedByUser;
             		%>
 		            <div class="post">
@@ -293,7 +292,7 @@
 		                </div>
 		            </div>
 	            	<% } %>
-	            <% } else if (myposts.isEmpty == true){ %>
+	            <% } else if (myposts.isEmpty() == true){ %>
 	            <p>No posts currently</p>
 	            <% } %>
         </div>
