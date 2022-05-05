@@ -28,10 +28,10 @@ import util.TBA;
 
 public class Database {
 	
-	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
-	private static String USER = "root";
-	private static String PASSWORD = "root";
+	public static String DRIVER = "com.mysql.cj.jdbc.Driver";
+	public static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
+	public static String USER = "root";
+	public static String PASSWORD = "root";
 	
 	
 	//Account Validation Database Functions
