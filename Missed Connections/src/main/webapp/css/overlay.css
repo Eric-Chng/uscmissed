@@ -53,7 +53,7 @@ body {
 	color: white;
 	text-align: left;
 }
-#submit_post_button {
+#submit_post_button, #reset_post_button {
 	background-color: #D56262;
 	margin-right: 35px;
 	color: white;

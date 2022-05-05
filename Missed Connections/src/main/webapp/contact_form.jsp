@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,6 +113,10 @@
 	    input:checked[type="radio"]:after {
 	      background-color: #D56262;
 	    }
+	    ::placeholder {
+			color: white;
+			font-family: 'Adagio Sans';
+		}
 	</style>
 </head>
 <body>
@@ -130,8 +135,15 @@
 				</div>
 				<div class="submit_post_row" style="text-align:right">
 					<button type="submit" id="submit_post_button">Submit</button>
+					<button type="reset" id="reset_post_button">Reset</button>
 				</div>
 			</form>
+			<!-- ***********"POST SUBMITTED" APPEARS WHEN FORM SUBMITTED********** -->
+<%-- 			<%
+				if (! get_post_comment(postId).equalsTo(null)) {
+					out.println("<h3>Post Submitted!</h3>");
+				}
+			%> --%>
 		</div>
 	</div>
 	
@@ -153,7 +165,7 @@
 		        <div class="link" id ="signin">Account Login</div>
 		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
 		        <%
-		        	int x=0;
+		        	int x=1;
 		        	if (x==1) {
 		        		out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
 		        	}
@@ -173,7 +185,7 @@
 						Contact Us
 					</h1>
 				</div>
-				<form action="Server" method="GET">
+				<form action="Search" method="GET">
 					<div class="row">
 						<label for="name">Name:</label>
 					</div>
