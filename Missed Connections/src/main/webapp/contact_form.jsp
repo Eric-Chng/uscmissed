@@ -126,7 +126,7 @@
 			<div class="new_post_header">
 				<h1>New Post</h1>
 			</div>
-			<form action="Server" method="GET">
+			<form action="TBAServlet" method="GET">
 				<div class="submit_post_row">
 					<textarea id="post_comment" placeholder="Write" name="post_comment" required></textarea>
 				</div>
