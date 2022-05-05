@@ -40,6 +40,18 @@ img{
     overflow-x: hidden;
 }
 
+#signin{
+	font-size: 1.2em;
+	color: #D56262;
+	margin-left: 5.5vw;
+	margin-top: 4vh;
+}
+
+#signin a{
+	color: #D56262;
+    text-decoration: none;
+}
+
 .link{
 	font-size: 1.2em;
 	color: #D56262;
