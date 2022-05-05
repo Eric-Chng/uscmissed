@@ -5,14 +5,57 @@
 <head>
 <link rel="stylesheet" href="css/sidebar.css">
 <meta charset="UTF-8">
+
+<!-- START COPYING HERE  -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+ <script>
+  var googleUser = {};
+  var startApp = function() {
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+      });
+      attachSignin(document.getElementById('signin'));
+    });
+  };
+
+  function attachSignin(element) {
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+    	  var email = googleUser.getBasicProfile().getEmail();
+    	  var name = googleUser.getBasicProfile().getName().split(' ').join('+');
+    	  var url = email.substring(email.indexOf('@') + 1);
+		  if(url != "usc.edu"){
+			  alert("The account you used is not a USC email. Please sign in with your USC email.");
+			  var auth2 = gapi.auth2.getAuthInstance();
+			  auth2.disconnect();
+		  }
+		  else {
+		  	   document.cookie = "useremail=" + email;
+		  	   document.cookie = "username=" + name;
+			   window.location = "GoogleDispatcher";
+		  }
+        }, function(error) {
+           alert("Sign in not completed, please try again.");
+        });
+  }
+  </script>
+  <!-- END COPYING HERE  -->
+  
 <title>Sidebar</title>
 </head>
 <body>
 	<main> 
+	  <script>startApp();</script>
 		<div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <div class="link" id ="signin">Account Login</div>
+            <!-- THE LINE BELOW HAS ALSO BEEN CHANGED   -->
+            <div class="customGPlusSignIn" id = "signin" >Account Login</div>
             <div class="link"><a href="contactus.jsp">Contact Us</a></div>
             <div class = "submitPost">Submit Post</div>
         </div>
