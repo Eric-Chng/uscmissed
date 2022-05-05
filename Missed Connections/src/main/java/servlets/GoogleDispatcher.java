@@ -40,7 +40,7 @@ public class GoogleDispatcher extends HttpServlet {
         //String password = (String) request.getParameter("type");
         
         String db = Database.ADDRESS;
-    	String sql = "SELECT * FROM user WHERE email = '" + email + "'";
+    	String sql = "SELECT * FROM user WHERE email = '" + email + "';";
     	String isql = "INSERT INTO user (Name, email, type) VALUES (?, ?, ?)"; 
     	try {
             Class.forName("com.mysql.cj.jdbc.Driver");

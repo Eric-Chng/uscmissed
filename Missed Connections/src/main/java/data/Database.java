@@ -272,6 +272,31 @@ public class Database {
 		return result;
 	}
 	
+	public ArrayList<Post> top_recent_posts(int user_id) {
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> most_recent_post_id = new ArrayList<Integer>();
+		String sql = "SELECT posts.*, COUNT(likes.post_id) AS post_count FROM posts LEFT JOIN likes ON posts.post_id = likes.post_id GROUP BY posts.post_id ORDER BY post_count DESC LIMIT 5;";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				most_recent_post_id.add(rs.getInt("post_id"));
+				
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int post_id : most_recent_post_id) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		
+		return result;
+	}
+	
 	//takes in user_id, post_id and increments like counter for associated post (user likes a post)
 	public void user_liked_post(int post_id, int user_id) {
 		int user_liked = if_user_liked(post_id, user_id); 
