@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -165,13 +166,20 @@
 		        <div class="link" id ="signin">Account Login</div>
 		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
 		        <%
-		        	int x=1;
-		        	if (x==1) {
-		        		out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
-		        	}
-		        	else {
-		        		out.println("<div class='submitPost' onclick='openInvalidNav()'>Submit Post</div>");
-		        	}
+		        	int userid = -1; 
+			        Cookie cookies[] = request.getCookies();
+					for (Cookie c : cookies) {
+						if (c.getName().equals("userid")) {
+							userid = Integer.parseInt(c.getValue().trim());
+						}
+					}
+					if (userid == -1) {
+						// no user logged in
+						out.println("<div class='submitPost' onclick='openInvalidNav()'>Submit Post</div>");
+					}
+					else { // user is logged in
+						out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
+					}
 		        %>
 		        
 		    <!-- </div> -->
