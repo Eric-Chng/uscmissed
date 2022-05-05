@@ -185,7 +185,7 @@
 						Contact Us
 					</h1>
 				</div>
-				<form action="Search" method="GET">
+				<form action="ContactServlet" method="GET">
 					<div class="row">
 						<label for="name">Name:</label>
 					</div>
