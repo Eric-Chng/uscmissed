@@ -63,17 +63,6 @@
                 font-weight: normal;
                 font-style: normal;
             }
-            /* @font-face {
-                font-family: 'Adagio Sans';
-                src: url('Adagio_Sans-SemiBold.eot');
-                src: local('Adagio Sans SemiBold'), local('Adagio_Sans-SemiBold'),
-                    url('Adagio_Sans-SemiBold.eot?#iefix') format('embedded-opentype'),
-                    url('Adagio_Sans-SemiBold.woff2') format('woff2'),
-                    url('Adagio_Sans-SemiBold.woff') format('woff'),
-                    url('Adagio_Sans-SemiBold.ttf') format('truetype');
-                font-weight: 600;
-                font-style: normal;
-            } */
            body {
                margin: 0px;
                background-color: #FFF7F0;
@@ -110,7 +99,7 @@
                 background-color: #D56262;
             }
             .right-bubble {
-                margin-left: 2.6vw;
+            	margin-left: 0.6vw;
                 margin-top: 0.7vw;
                 margin-bottom: 1.5vw;
                 display: inline-block;
@@ -155,6 +144,17 @@
                 border: 1vw solid;
                 border-color: #FDBB63 transparent transparent #FDBB63;
             }
+            .post-title {
+            	font-size: 1.2em;
+				color: #FDBB63;
+/* 				margin-left: 5.5vw; */
+				margin-top: 4vh;
+			}
+			
+			.post-title a {
+			    color: #FDBB63;
+			    text-decoration: none;
+			}
             .submit-box {
                 float: right;
                 font-size: 1.1em;
@@ -186,11 +186,17 @@
                cursor: pointer;
                outline: none;
             }
+            .post {
+            	width: 45.3vw;
+               height: 100%;
+               margin-left: 24.5vw;
+               padding: 2vw;
+            }
             .stats {
                 float: right;
                 font-size: 1.1em;
                 margin-top: -0.7vw;
-                margin-right: 1.5vw;
+                margin-right: 2.5vw;
                 color: #FDBB63;
             }
             #post-content {
@@ -309,7 +315,7 @@
                     </div>
                 </div>
             </div>
-   
+   </div>
             <% Database db = new Database();
             ArrayList<Post> myposts = db.most_recent_posts(0);
         	if(myposts.isEmpty() == false) {
@@ -322,7 +328,7 @@
         			boolean ifliked = myposts.get(i).likedByUser;
         			
 	            out.println("<div class='post'>");
-	            	out.println("<a href='expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked + "> " + postid + "</a>");
+	            	out.println("<a class='post-title' href='expand.jsp?postid=" + postid + "'> Post #" + postid + " </a>");
 	                out.println("<div class='right-bubble tri-right right-in'>");
 	                    out.println("<div class='talktext'>");
 	                      out.println("<p>" + postcontent + "</p>");
@@ -333,10 +339,10 @@
 	                        out.println("<tr>");
 	                            out.println("<td>" + likes);
 	                            if(ifliked==true) {
-	                           		out.println("<a href='expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked + "><button type='button' class='like-button'><i class='fa-solid fa-heart'></i></button></a>");
+	                           		out.println("<button type='button' class='like-button'><i class='fa-solid fa-heart'></i></button>");
 	                            }
 	                            else {
-	                                out.println("<a href='expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked + "><button type='button' class='like-button'><i class='fa-regular fa-heart'></i></button></a>");
+	                                out.println("<button type='button' class='like-button'><i class='fa-regular fa-heart'></i></button>");
 	                            }
 	                            out.println("</td>");
 	                            out.println("<td> </td>");
@@ -350,7 +356,7 @@
        	else {
            	out.println("<p>No posts currently</p>");
         } %>
-        </div>
+        
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>

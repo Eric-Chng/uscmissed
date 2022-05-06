@@ -3,7 +3,11 @@
 <%@page import="java.util.*" %>
 <%@page import="util.Post" %>
 <%@page import="util.User" %>
-
+<%@page import="javax.servlet.http.Cookie" %>
+<%@page import="javax.servlet.http.HttpServlet"%>
+<%@page import="javax.servlet.http.HttpServletRequest"%>
+<%@page import="javax.servlet.http.HttpServletResponse"%>
+<%@page import="data.Database" %>
 <!DOCTYPE html>
 
 <html>
@@ -188,22 +192,49 @@
             <%-- <% } %> --%>
             <div class = "submitPost">Submit Post</div>
         </div>
-        <% int id = (int) request.getAttribute("id");
-    	   String content = (String) request.getAttribute("content");
-    	   int likes = (int) request.getAttribute("likes");
-    	   int comments = (int) request.getAttribute("comments");
-    	   ArrayList<String> mycomments = (ArrayList<String>) request.getAttribute("mycomments");
-    	   boolean ifliked = (boolean) request.getAttribute("ifliked");%>
+        <% int userid = -1;
+			String username = "";
+			String useremail = "";
+			String usertype = "";
+			if(request.getCookies() != null){
+				Cookie[] cookies = request.getCookies();
+				for (Cookie c : cookies) {
+					if (c.getName().equals("userid")) {
+						userid = Integer.parseInt(c.getValue().trim());
+					}
+					if (c.getName().equals("username")) {
+						username = c.getValue().trim();
+					}
+					if (c.getName().equals("useremail")) {
+						useremail = c.getValue().trim();
+					}
+					if (c.getName().equals("usertype")) {
+						usertype = c.getValue().trim();
+					}
+				}
+			}
+			
+        
+        	int post_id = Integer.parseInt(request.getParameter("postid"));
+        	Database db = new Database();
+			Post post = db.get_post(post_id, userid);
+					
+    		String postcontent = post.postContent;
+    		int likes = post.likes;
+    		int comments = post.comments.size();
+    		ArrayList<String> mycomments = (ArrayList<String>)post.comments;
+    		boolean ifliked = post.likedByUser;
+    	   %>
         <div id="main">
             <div id="header">
-                <h1>Post #<%=id %></h1>
+                <h1>Post #<%=post_id%></h1>
             </div>
             
             <div id="current-post">
                 <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
                 <div class="left-bubble tri-right left-in">
                     <div class="talktext">
-                        <p><%=content %></p>
+                        <p><%=postcontent%></p>
                     </div>
                 </div>
                 
@@ -239,12 +270,13 @@
 	           </div>
 	        </form>
 	        
-	        <%for(int i=0; i<comments; ++i) { %>
-	            <div class="right-bubble tri-right right-in">
-	                <div class="talktext">
-	                  <p><%= mycomments.get(i) %></p>
-	            </div>
-           <% } %>
+	        <% for(int i=0; i<comments; ++i) {
+	            out.println("<div class='right-bubble tri-right right-in'>");
+	                out.println("<div class='talktext'>");
+	                  out.println("<p>" + mycomments.get(i) + "</p>");
+	            out.println("</div>");
+	        }
+            %>
         	</div>
         </div>
         
