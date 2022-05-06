@@ -43,7 +43,6 @@
 			  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
 			  }
 	        }, function(error) {
-	           alert("Sign in not completed, please try again.");
 	        });
 	  }
 	  </script>	
@@ -201,16 +200,30 @@
 			<script>startApp();</script>
 		        <a href="homepage.jsp"><img src = "images/logo.png"></a>
 		        <div class="link"><a href="homepage.jsp">Home</a></div>
-		        <div class="customGPlusSignIn" id = "signin" >Account Login</div>
-		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
-		        <%
-		        	int userid = -1; 
-			        Cookie cookies[] = request.getCookies();
+		         <% int userid = -1;
+		         if(request.getCookies() != null){
+					Cookie[] cookies = request.getCookies();
 					for (Cookie c : cookies) {
 						if (c.getName().equals("userid")) {
 							userid = Integer.parseInt(c.getValue().trim());
 						}
 					}
+		         }
+		   		%>
+	            <% if (userid == -1) { %>
+	            <div class="customGPlusSignIn" id="signin">Account Login</div>
+	            <% } else if (userid != -1){ %>
+	            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
+	            <% } %>
+		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
+		        <%
+/* 		        	int userid = -1; 
+			        Cookie cookies[] = request.getCookies();
+					for (Cookie c : cookies) {
+						if (c.getName().equals("userid")) {
+							userid = Integer.parseInt(c.getValue().trim());
+						}
+					} */
 					if (userid == -1) {
 						// no user logged in
 						out.println("<div class='submitPost' onclick='openInvalidNav()'>Submit Post</div>");

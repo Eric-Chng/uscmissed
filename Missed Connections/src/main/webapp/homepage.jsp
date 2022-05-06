@@ -46,7 +46,6 @@
 				  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
 				  }
 		        }, function(error) {
-		           alert("Sign in not completed, please try again.");
 		        });
 		  }
 		  </script>
@@ -214,33 +213,34 @@
 			String username = "";
 			String useremail = "";
 			String usertype = "";
-			Cookie[] cookies = request.getCookies();
-			for (Cookie c : cookies) {
-				if (c.getName().equals("userid")) {
-					userid = Integer.parseInt(c.getValue().trim());
-				}
-				if (c.getName().equals("username")) {
-					username = c.getValue().trim();
-				}
-				if (c.getName().equals("useremail")) {
-					useremail = c.getValue().trim();
-				}
-				if (c.getName().equals("usertype")) {
-					usertype = c.getValue().trim();
+			if(request.getCookies() != null){
+				Cookie[] cookies = request.getCookies();
+				for (Cookie c : cookies) {
+					if (c.getName().equals("userid")) {
+						userid = Integer.parseInt(c.getValue().trim());
+					}
+					if (c.getName().equals("username")) {
+						username = c.getValue().trim();
+					}
+					if (c.getName().equals("useremail")) {
+						useremail = c.getValue().trim();
+					}
+					if (c.getName().equals("usertype")) {
+						usertype = c.getValue().trim();
+					}
 				}
 			}
 
    		%>
         <div id="leftSidebar">
+        	<script>startApp();</script>
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
             <% if (userid == -1) { %>
-            <div class="customGPlusSignIn" id="signin">Account Login</div>
-            <% } else if (userid != -1){ %>
-            	<form action="LogoutDispatcher" method="GET">
-            		<button type="submit" id="logout" value="log out">Log out</button>
-            	</form>
-            <% } %>
+	            <div class="customGPlusSignIn" id="signin">Account Login</div>
+	            <% } else if (userid != -1){ %>
+	            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
+	            <% } %>
             
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%

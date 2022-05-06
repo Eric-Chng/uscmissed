@@ -54,13 +54,13 @@
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
             <!-- THE LINE BELOW HAS ALSO BEEN CHANGED   -->
             <% int userid = -1;
-			Cookie[] cookies = request.getCookies();
-			for (Cookie c : cookies) {
-				if (c.getName().equals("userid")) {
-					userid = Integer.parseInt(c.getValue().trim());
+				Cookie[] cookies = request.getCookies();
+				for (Cookie c : cookies) {
+					if (c.getName().equals("userid")) {
+						userid = Integer.parseInt(c.getValue().trim());
+					}
 				}
-			}
-   		%>
+	   		%>
             <% if (userid == -1) { %>
             <div class="customGPlusSignIn" id="signin">Account Login</div>
             <% } else if (userid != -1){ %>
