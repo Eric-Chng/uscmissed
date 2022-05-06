@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.*" %>
+<%@page import="util.Post" %>
+<%@page import="data.Database" %>
+<%@page import="util.User" %>
 <!DOCTYPE html>
 
 <html>
@@ -107,32 +111,39 @@
             <div id="header">
                 <h1>Admin Review</h1>
             </div>
-            <div class="post-box">
-                <p class="post-id">Post #</p>
-                <div class="post-content">
-                    <!-- Post content -->
-                    <p>hi</p>
-                </div>
-                <div class="buttons">
-                    <table>
-                        <tr>
-                            <td>
-                                <button type="submit"><i class="fa-regular fa-heart"></i></button>
-                                <!-- pass post_id and boolean (1=approved, 0=deleted) back to servlet -->
-                            </td>
-                            <td>
-                                <p>Approve</p>
-                            </td>
-                            <td>
-                                <button type="submit"><i class="fa-solid fa-x"></i></button>
-                            </td>
-                            <td>
-                                <p>Delete</p>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            
+            <% Database db = new Database();
+            
+            ArrayList<Post> myposts = db.all_tobeApproved();
+            if(myposts.isEmpty() == true) { out.println("<p>No posts to approve!</p>"); } %>
+            <c:if ${myposts.isEmpty()}=false>
+            <c:forEach items="${myposts}" var="post">        
+	            <div class="post-box">
+	                <p class="post-id">Post #</p>
+	                <div class="post-content">
+	                    <p>${post.postContent}</p>
+	                </div>
+	                <div class="buttons">
+	                    <table>
+	                        <tr>
+	                            <td>
+	                                <button type="submit"><i class="fa-regular fa-heart"></i></button>
+	                            </td>
+	                            <td>
+	                                <p>Approve</p>
+	                            </td>
+	                            <td>
+	                                <button type="submit"><i class="fa-solid fa-x"></i></button>
+	                            </td>
+	                            <td>
+	                                <p>Reject</p>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                </div>
+	            </div>
+            </c:forEach>
+            </c:if>
         </div>
     </body>
 </html>
