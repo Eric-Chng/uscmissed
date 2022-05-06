@@ -220,6 +220,12 @@
 	            <% } else if (userid != -1){ %>
 	            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
 	            <% } %>
+	            
+	             <%
+            	if(usertype.contentEquals("admin")) { %>
+            		<div class="link"><a href="admin.jsp">Admin Review</a></div>
+            	<% } %>
+	            
 		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
 		        <%
 /* 		        	int userid = -1; 
@@ -237,10 +243,7 @@
 						out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
 					}
 		        %>
-		        <%
-            	if(usertype.contentEquals("admin")) { %>
-            		<div class="link"><a href="admin.jsp">Admin Review</a></div>
-            	<% } %>
+		       
 		        
 		    <!-- </div> -->
 		</div>
