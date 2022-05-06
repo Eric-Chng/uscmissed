@@ -30,9 +30,10 @@ public class RejectServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		int post_id = XXX; //get the post_id from the jsp page
+		String post_id = request.getParameter("approve_id"); //get the post_id from the jsp page
+		int approve_id = Integer.parseInt(post_id);
 		Database db = new Database();
-		db.reject_post(post_id);
+		db.reject_post(approve_id);
 		
 		request.getRequestDispatcher("/admin.jsp").forward(request, response);
 	}
