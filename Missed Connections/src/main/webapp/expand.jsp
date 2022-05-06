@@ -279,6 +279,7 @@
                         </tr>
                     </table>
                 </div>
+                <input type="hidden" name="post_id" value="${post_id}" />
                 </form>
            	</div>
            	
