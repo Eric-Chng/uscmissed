@@ -209,6 +209,7 @@
         </style>
     </head>
     <body>
+
     	<% int userid = -1;
 			String username = "";
 			String useremail = "";
@@ -228,6 +229,7 @@
 					usertype = c.getValue().trim();
 				}
 			}
+
    		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
