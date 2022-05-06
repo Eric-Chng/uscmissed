@@ -36,6 +36,7 @@ body {
 	background-color: #D56262;
 	border: none;
 	color: white;
+	font-family: 'Adagio Sans';
 }
 ::placeholder {
 	color: white;
@@ -52,8 +53,10 @@ body {
 	border: none;
 	color: white;
 	text-align: left;
+	font-family: 'Adagio Sans';
 }
 #submit_post_button, #reset_post_button {
+	font-family: 'Adagio Sans';
 	background-color: #D56262;
 	margin-right: 35px;
 	color: white;
