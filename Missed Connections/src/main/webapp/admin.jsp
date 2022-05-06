@@ -101,10 +101,11 @@
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link"><a href="homepage.jsp">Home</a></div>
             <div class="link" id ="signin">Account Login</div>
-            <div class="link"><a href="contactus.jsp">Contact Us</a></div>
+            <div class="link-current"><a href="admin.jsp">Admin Review</a></div>
+            <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%-- <%
             if(user.status=="admin") { %> --%>
-            	<div class="link-current"><a href="admin.jsp">Admin Review</a></div>
+            	<!-- <div class="link-current"><a href="admin.jsp">Admin Review</a></div> -->
             <%-- <% } %> --%>
             <div class = "submitPost">Submit Post</div>
         </div>
