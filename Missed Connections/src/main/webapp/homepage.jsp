@@ -5,6 +5,7 @@
 <%@page import="data.Database" %>
 <%@page import="util.User" %>
 <%@page import="javax.servlet.http.Cookie" %>
+
 <!DOCTYPE html>
 
 <html>
@@ -14,7 +15,8 @@
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
-        
+        <link rel="stylesheet" href="css/overlay.css">
+		<link rel="stylesheet" href="css/noPostOverlay.css">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
 		<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
 		  <script src="https://apis.google.com/js/api:client.js"></script>
