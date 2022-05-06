@@ -35,6 +35,7 @@ public class ApproveServlet extends HttpServlet {
 		int approve_id = Integer.parseInt(post_id);
 		Database db = new Database();
 		db.approve_post(approve_id);
+		System.out.println("approved");
 		
 		request.getRequestDispatcher("/admin.jsp").forward(request, response);
 		

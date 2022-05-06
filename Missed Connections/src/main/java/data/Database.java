@@ -31,7 +31,7 @@ public class Database {
 	public static String DRIVER = "com.mysql.cj.jdbc.Driver";
 	public static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
 	public static String USER = "root";
-	public static String PASSWORD = "root";
+	public static String PASSWORD = "password";
 	
 	
 	//Account Validation Database Functions
@@ -249,6 +249,7 @@ public class Database {
 	
 	//returns the most recent 100 post to show on the feed as Arraylist<Post>
 	public ArrayList<Post> most_recent_posts(int user_id) {
+		System.out.println("A");
 		String MOST_RECENT = "SELECT post_id FROM posts ORDER BY post_id DESC LIMIT 100";
 		ArrayList<Post> result = new ArrayList<Post>();
 		ArrayList<Integer> most_recent_post_id = new ArrayList<Integer>();
@@ -258,6 +259,7 @@ public class Database {
 			PreparedStatement statement = conn.prepareStatement(MOST_RECENT);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
+				System.out.println("Active");
 				most_recent_post_id.add(rs.getInt("post_id"));
 				
 			}
@@ -268,7 +270,9 @@ public class Database {
 		for (int post_id : most_recent_post_id) {
 			Post temp = get_post(post_id, user_id);
 			result.add(temp);
+			System.out.println("HERE");
 		}
+		System.out.println("RETURNED");
 		return result;
 	}
 	
@@ -451,7 +455,7 @@ public class Database {
 	
 	//return all to_be_approved posts as ArrayList<TBA>
 	public ArrayList<TBA> to_be_approved_posts() {
-		String TO_BE_APPROVED = "SELECT approve_id FROM toBeApproved";
+		String TO_BE_APPROVED = "SELECT * FROM toBeApproved";
 		ArrayList<TBA> result = new ArrayList<TBA>();
 		try {
 			Class.forName(DRIVER);
