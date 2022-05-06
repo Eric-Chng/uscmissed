@@ -209,6 +209,7 @@
         </style>
     </head>
     <body>
+
     	<% int userid = -1;
 			String username = "";
 			String useremail = "";
@@ -228,6 +229,7 @@
 					usertype = c.getValue().trim();
 				}
 			}
+
    		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
@@ -266,7 +268,7 @@
             ArrayList<Post> myposts = db.most_recent_posts(0);
             //ArrayList<Post> myposts = (ArrayList<Post>)request.getAttribute("posts");
             if(myposts.isEmpty() == true) { out.println("<p>No posts!</p>"); } %>
-            
+            <c:if ${myposts.isEmpty()}=false>
             <c:forEach items="${myposts}" var="post">        
 		            <div class="post">
 		            	<a href=<%="expand.jsp?id=" + "${post.post_id}" + "&content=" + "${post.postContent}" + "&likes=" + "${post.likes}" + "&comments=" + "${post.comments.size()}" + "&mycomments=" + "${post.comments}" + "&iflike=" + "${post.likedByUser}" %>>${post.post_id}<${post.post_id}/a>
@@ -293,7 +295,7 @@
 		                </div>
 		            </div>
 	            </c:forEach>
-	            
+	            </c:if>
         </div>
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
