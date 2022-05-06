@@ -143,7 +143,7 @@
             	for (TBA post : to_be_approved) {
                     
     	            out.println("<div class='post-box'>");
-    	                out.println("<p class='post-id'>Post #</p>");
+    	                out.println("<p class='post-id'>To be Approved:</p>");
     	                out.println("<div class='post-content'>");
     	                    out.println("<p>" + post.content + "</p>");
     	                out.println("</div>");
@@ -151,13 +151,17 @@
     	                    out.println("<table>");
     	                        out.println("<tr>");
     	                            out.println("<td>");
-    	                                out.println("<button type='submit' value='" + post.approve_id + "'><i class='fa-regular fa-heart'></i></button>");
+    	                            	out.println("<form action=\"ApproveServlet\" method = \"GET\">");
+    	                                	out.println("<button type='submit' name='approve_id' value='" + post.approve_id + "'><i class='fa-regular fa-heart'></i></button>");
+    	                                out.println("</form>");
     	                            out.println("</td>");
     	                            out.println("<td>");
     	                                out.println("<p>Approve</p>");
     	                            out.println("</td>");
     	                            out.println("<td>");
-    	                                out.println("<button type='submit' value='" + post.approve_id + "'><i class='fa-solid fa-x'></i></button>");
+    	                           		out.println("<form action=\"RejectServlet\" method = \"GET\">");
+    	                                	out.println("<button type='submit' name='approve_id' value='" + post.approve_id + "'><i class='fa-solid fa-x'></i></button>");
+    	                                out.println("</form>");
     	                            out.println("</td>");
     	                            out.println("<td>");
     	                                out.println("<p>Reject</p>");

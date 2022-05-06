@@ -30,8 +30,13 @@ public class Like extends HttpServlet {
 			}
 		}
 		
-		//Getting current post 
+		//Getting current post; 
+		String id = (String) request.getAttribute("post_id");
+		System.out.println("DATA:");
+		System.out.println(id);
+		
 		Post post = (Post) request.getAttribute("post");
+		
 		
 		//Check if unliked, then adds like to database table
 		if (db.if_user_liked(post.post_id, user.user_id) == 0) {
