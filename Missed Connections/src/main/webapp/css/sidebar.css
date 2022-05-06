@@ -128,6 +128,21 @@ img{
     overflow-y: auto;
 }
 
+.trending{
+	background-color: #FDBB63;
+	border-radius: 25px;
+	width: 17.5vw;
+	margin-left: 4.5vw;
+	margin-top: 2vh;
+}
+
+.trendingtext {
+    color: white;
+    padding: 1em;
+    text-align: center;
+    line-height: 1.5em;
+}
+
 #search-button {
     background-color: transparent;
     border: 0px;
