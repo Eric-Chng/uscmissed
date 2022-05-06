@@ -53,7 +53,19 @@
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
             <!-- THE LINE BELOW HAS ALSO BEEN CHANGED   -->
-            <div class="customGPlusSignIn" id = "signin" >Account Login</div>
+            <% int userid = -1;
+			Cookie[] cookies = request.getCookies();
+			for (Cookie c : cookies) {
+				if (c.getName().equals("userid")) {
+					userid = Integer.parseInt(c.getValue().trim());
+				}
+			}
+   		%>
+            <% if (userid == -1) { %>
+            <div class="customGPlusSignIn" id="signin">Account Login</div>
+            <% } else if (userid != -1){ %>
+            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
+            <% } %>
             <div class="link"><a href="contactus.jsp">Contact Us</a></div>
             <div class = "submitPost">Submit Post</div>
         </div>
