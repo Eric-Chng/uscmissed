@@ -25,17 +25,15 @@ public class Like extends HttpServlet {
 		User user = null;
 		Cookie cookies[] = request.getCookies();
 		for (Cookie c : cookies) {
-			if (c.getName().equals("user_id")) {
+			if (c.getName().equals("userid")) {
 				user = db.get_user_data(Integer.parseInt(c.getValue()));
 			}
 		}
 		
 		//Getting current post; 
-		String id = (String) request.getAttribute("post_id");
-		System.out.println("DATA:");
-		System.out.println(id);
+		int id = Integer.parseInt(request.getParameter("post_id"));
 		
-		Post post = (Post) request.getAttribute("post");
+		Post post = db.get_post(id, user.user_id);
 		
 		
 		//Check if unliked, then adds like to database table
@@ -45,9 +43,9 @@ public class Like extends HttpServlet {
 		
 		//Updating post in request
 		request.setAttribute("post", db.get_post(post.post_id, user.user_id));
-		
+				
 		//Redirect to ViewPost servlet
-		response.sendRedirect("expand.jsp");
+		response.sendRedirect("expand.jsp" + "?postid=" + post.getPostID());
 		
 		
 	}

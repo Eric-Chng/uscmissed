@@ -240,9 +240,9 @@
         <%
 			
         
-        	int post_id = Integer.parseInt(request.getParameter("postid"));
+        	int postId = Integer.parseInt(request.getParameter("postid"));
         	Database db = new Database();
-			Post post = db.get_post(post_id, userid);
+			Post post = db.get_post(postId, userid);
 					
     		String postcontent = post.postContent;
     		int likes = post.likes;
@@ -252,7 +252,7 @@
     	   %>
         <div id="main">
             <div id="header">
-                <h1>Post #<%=post_id%></h1>
+                <h1>Post #<%=postId%></h1>
             </div>
             
             <div id="current-post">
@@ -264,6 +264,7 @@
                 </div>
                 
                 <form action="Like" method="POST">
+                <input type="hidden" name="post_id" value="<%=postId%>" />
                 <div class="stats">
                     <table>
                         <tr>
@@ -279,7 +280,6 @@
                         </tr>
                     </table>
                 </div>
-                <input type="hidden" name="post_id" value="${post_id}" />
                 </form>
            	</div>
            	
