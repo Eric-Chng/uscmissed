@@ -16,7 +16,7 @@ import data.Database;
 
 @WebServlet("/Feed")
 public class Feed extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7507777331673090255L;
        
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Database db = new Database();

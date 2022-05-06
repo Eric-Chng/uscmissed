@@ -14,7 +14,7 @@ import data.Database;
 
 @WebServlet("/Comment")
 public class Comment extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7507777331673090255L;
 
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,6 +46,5 @@ public class Comment extends HttpServlet {
 		
 		
 	}
-	}
-
 }
+

@@ -15,7 +15,7 @@ import data.Database;
 
 @WebServlet("/Like")
 public class Like extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7507777331673090255L;
 
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
