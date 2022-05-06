@@ -4,6 +4,7 @@
 <%@page import="util.Post" %>
 <%@page import="data.Database" %>
 <%@page import="util.User" %>
+<%@page import="util.TBA" %>
 <!DOCTYPE html>
 
 <html>
@@ -114,36 +115,42 @@
             
             <% Database db = new Database();
             
-            ArrayList<Post> myposts = db.all_tobeApproved();
-            if(myposts.isEmpty() == true) { out.println("<p>No posts to approve!</p>"); } %>
-            <c:if ${myposts.isEmpty()}=false>
-            <c:forEach items="${myposts}" var="post">        
-	            <div class="post-box">
-	                <p class="post-id">Post #</p>
-	                <div class="post-content">
-	                    <p>${post.postContent}</p>
-	                </div>
-	                <div class="buttons">
-	                    <table>
-	                        <tr>
-	                            <td>
-	                                <button type="submit"><i class="fa-regular fa-heart"></i></button>
-	                            </td>
-	                            <td>
-	                                <p>Approve</p>
-	                            </td>
-	                            <td>
-	                                <button type="submit"><i class="fa-solid fa-x"></i></button>
-	                            </td>
-	                            <td>
-	                                <p>Reject</p>
-	                            </td>
-	                        </tr>
-	                    </table>
-	                </div>
-	            </div>
-            </c:forEach>
-            </c:if>
+            ArrayList<TBA> to_be_approved = db.to_be_approved_posts();
+            if (to_be_approved.isEmpty() == true) { 
+            	out.println("<p>No posts to approve!</p>"); 
+            } 
+            else {
+            	for (TBA post : to_be_approved) {
+                    
+    	            out.println("<div class='post-box'>");
+    	                out.println("<p class='post-id'>Post #</p>");
+    	                out.println("<div class='post-content'>");
+    	                    out.println("<p>" + post.content + "</p>");
+    	                out.println("</div>");
+    	                out.println("<div class='buttons'>");
+    	                    out.println("<table>");
+    	                        out.println("<tr>");
+    	                            out.println("<td>");
+    	                                out.println("<button type='submit' value='" + post.approve_id + "'><i class='fa-regular fa-heart'></i></button>");
+    	                            out.println("</td>");
+    	                            out.println("<td>");
+    	                                out.println("<p>Approve</p>");
+    	                            out.println("</td>");
+    	                            out.println("<td>");
+    	                                out.println("<button type='submit' value='" + post.approve_id + "'><i class='fa-solid fa-x'></i></button>");
+    	                            out.println("</td>");
+    	                            out.println("<td>");
+    	                                out.println("<p>Reject</p>");
+    	                            out.println("</td>");
+    	                        out.println("</tr>");
+    	                    out.println("</table>");
+    	                out.println("</div>");
+    	            out.println("</div>");
+    	            
+            	}
+            }   
+            %>
+
         </div>
     </body>
 </html>
