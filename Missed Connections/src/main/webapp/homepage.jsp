@@ -348,7 +348,14 @@
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
-                <div class = "post"></div>
+	            <% 
+	            	ArrayList<Post> trending = db.top_recent_posts(0);
+	            %>
+	            <c:forEach items="${trending}" var="post"> 
+	            	<div class="trending">
+	            		<div class="trendingtext">${post.postContent}</div>
+	            	</div>
+	            </c:forEach>
             </div>
         </div>
         <script>
