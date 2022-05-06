@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.*" %>
+<%@page import="util.Post" %>
+<%@page import="data.Database" %>
+<%@page import="util.User" %>
+<%@page import="javax.servlet.http.Cookie" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,7 +80,18 @@
             <input type="text" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
-                <div class = "post"></div>
+                <div class = "trendingContainer">
+	            <% 
+	            Database db = new Database();
+	            	ArrayList<Post> trending = db.top_recent_posts(0);
+	            %>
+	            <% for(Post c: trending){
+	            	out.println("<div class='trending'>");
+	            	out.println("<div class='trendingtext'>" + c.getPostContent() + "</div>");
+	            	out.println("</div>");
+	            }
+	            %>
+            </div>
             </div>
         </div>
 	</main>
