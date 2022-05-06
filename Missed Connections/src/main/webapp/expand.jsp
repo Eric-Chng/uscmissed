@@ -152,6 +152,13 @@
                cursor: pointer;
                outline: none;
             }
+            .comment-box {
+            	width: 45.3vw;
+               height: 100%;
+               margin-left: 23.5vw;
+               padding: 0.5vw;
+               padding-left: 2vw;
+            }
             .stats {
                 float: right;
                 font-size: 1.1em;
@@ -244,9 +251,9 @@
                         <tr>
                             <td><%=likes %>
                             <% if(ifliked==true) { %>
-                           		<button type="submit" class="like-button"><i class="fa-solid fa-heart"></i></button>
+                           		<i class="fa-solid fa-heart"></i>
                                 <% } else { %>
-                                <i class="fa-regular fa-heart"></i>
+                               <button type="submit" class="like-button"> <i class="fa-regular fa-heart"></i></button>
                                 <% } %>
                                 </td>
                             <td> </td>
@@ -255,7 +262,6 @@
                     </table>
                 </div>
                 </form>
-                
            	</div>
            	
             <p id="comments-header">Comments</p>
@@ -269,16 +275,18 @@
 	               </div>
 	           </div>
 	        </form>
+	     </div>
 	        
 	        <% for(int i=0; i<comments; ++i) {
-	            out.println("<div class='right-bubble tri-right right-in'>");
-	                out.println("<div class='talktext'>");
-	                  out.println("<p>" + mycomments.get(i) + "</p>");
+	        	out.println("<div class='comment-box'>");
+		            out.println("<div class='right-bubble tri-right right-in'>");
+		                out.println("<div class='talktext'>");
+		                  out.println("<p>" + mycomments.get(i) + "</p>");
+			            out.println("</div>");
+		            out.println("</div>");
 	            out.println("</div>");
 	        }
             %>
-        	</div>
-        </div>
         
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
