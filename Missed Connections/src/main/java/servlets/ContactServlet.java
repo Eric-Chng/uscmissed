@@ -44,7 +44,8 @@ public class ContactServlet extends HttpServlet {
 		
 		db.addFeedback(reason, content, email);
 		
-		request.getRequestDispatcher("/homepage.jsp").forward(request, response);
+		request.setAttribute("submitted", "Contact form successfully submitted!");
+		request.getRequestDispatcher("/contact_form.jsp").forward(request, response);
 		
 	}
 

@@ -11,6 +11,43 @@
 	<link rel="stylesheet" href="css/sidebar.css">
 	<link rel="stylesheet" href="css/overlay.css">
 	<link rel="stylesheet" href="css/noPostOverlay.css">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
+  
+  <script src="https://apis.google.com/js/api:client.js"></script>
+	 <script>
+	  var googleUser = {};
+	  var startApp = function() {
+	    gapi.load('auth2', function(){
+	      // Retrieve the singleton for the GoogleAuth library and set up the client.
+	      auth2 = gapi.auth2.init({
+	        client_id: '424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com',
+	        cookiepolicy: 'single_host_origin',
+	      });
+	      attachSignin(document.getElementById('signin'));
+	    });
+	  };
+	
+	  function attachSignin(element) {
+	    auth2.attachClickHandler(element, {},
+	        function(googleUser) {
+	    	  var email = googleUser.getBasicProfile().getEmail();
+	    	  var name = googleUser.getBasicProfile().getName().split(' ').join('=');
+	    	  var url = email.substring(email.indexOf('@') + 1);
+			  if(url != "usc.edu"){
+				  alert("The account you used is not a USC email. Please sign in with your USC email.");
+				  var auth2 = gapi.auth2.getAuthInstance();
+				  auth2.disconnect();
+			  }
+			  else {
+			  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
+			  }
+	        }, function(error) {
+	           alert("Sign in not completed, please try again.");
+	        });
+	  }
+	  </script>	
+	  
 	<style>
 		@font-face {
            font-family: 'Adagio Sans';
@@ -161,9 +198,10 @@
 	<div id="page_body">
 		<div id="leftSidebar">
 			<!-- <div class="column"> -->
+			<script>startApp();</script>
 		        <a href="homepage.jsp"><img src = "images/logo.png"></a>
 		        <div class="link"><a href="homepage.jsp">Home</a></div>
-		        <div class="link" id ="signin">Account Login</div>
+		        <div class="customGPlusSignIn" id = "signin" >Account Login</div>
 		        <div class="link-current"><a href="contact_form.jsp">Contact Us</a></div>
 		        <%
 		        	int userid = -1; 
@@ -188,6 +226,15 @@
 		
 		<div id="main_col">
 			<!-- <div class="column" style="float:right; width: 100%"> -->
+				<p>
+					<% 
+						if (request.getAttribute("submitted") != null) {
+								out.println("<div class='submit_response' style='background-color: #ffdab9; padding: 20px; margin-top: 15px; border-radius: 200px; text-align: center'>");
+								out.println(request.getAttribute("submitted"));
+								out.println("</div>");
+						}
+					%>
+				</p>
 				<div id="contact_us" style="margin-top: 50px; line-height: 50px">
 					<h1>
 						Contact Us
