@@ -201,14 +201,19 @@
 		        <a href="homepage.jsp"><img src = "images/logo.png"></a>
 		        <div class="link"><a href="homepage.jsp">Home</a></div>
 		         <% int userid = -1;
+		         String usertype = "";
 		         if(request.getCookies() != null){
 					Cookie[] cookies = request.getCookies();
 					for (Cookie c : cookies) {
 						if (c.getName().equals("userid")) {
 							userid = Integer.parseInt(c.getValue().trim());
 						}
+						if (c.getName().equals("usertype")) {
+							usertype = c.getValue().trim();
+						}
 					}
 		         }
+		         System.out.println(usertype);
 		   		%>
 	            <% if (userid == -1) { %>
 	            <div class="customGPlusSignIn" id="signin">Account Login</div>
@@ -232,6 +237,10 @@
 						out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
 					}
 		        %>
+		        <%
+            	if(usertype.contentEquals("admin")) { %>
+            		<div class="link"><a href="admin.jsp">Admin Review</a></div>
+            	<% } %>
 		        
 		    <!-- </div> -->
 		</div>
