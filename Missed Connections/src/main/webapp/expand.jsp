@@ -181,38 +181,56 @@
         </style>
     </head>
     <body>
+    
+    <% 
+    int userid = -1;
+	String username = "";
+	String useremail = "";
+	String usertype = "";
+	if(request.getCookies() != null){
+		Cookie[] cookies = request.getCookies();
+		for (Cookie c : cookies) {
+			if (c.getName().equals("userid")) {
+				userid = Integer.parseInt(c.getValue().trim());
+			}
+			if (c.getName().equals("username")) {
+				username = c.getValue().trim();
+			}
+			if (c.getName().equals("useremail")) {
+				useremail = c.getValue().trim();
+			}
+			if (c.getName().equals("usertype")) {
+				usertype = c.getValue().trim();
+			}
+		}
+	}
+    
+    
+    %>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <div class="link" id ="signin">Account Login</div>
+            <% if (userid == -1) { %>
+	            <div class="customGPlusSignIn" id="signin">Account Login</div>
+	            <% } else if (userid != -1){ %>
+	            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
+	            <% } %>
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
-            <%-- <%
-            if(user.status=="admin") { %> --%>
-            	<div class="link"><a href="admin.jsp">Admin Review</a></div>
-            <%-- <% } %> --%>
-            <div class = "submitPost">Submit Post</div>
-        </div>
-        <% int userid = -1;
-			String username = "";
-			String useremail = "";
-			String usertype = "";
-			if(request.getCookies() != null){
-				Cookie[] cookies = request.getCookies();
-				for (Cookie c : cookies) {
-					if (c.getName().equals("userid")) {
-						userid = Integer.parseInt(c.getValue().trim());
-					}
-					if (c.getName().equals("username")) {
-						username = c.getValue().trim();
-					}
-					if (c.getName().equals("useremail")) {
-						useremail = c.getValue().trim();
-					}
-					if (c.getName().equals("usertype")) {
-						usertype = c.getValue().trim();
-					}
+            <%
+            	if(usertype.contentEquals("admin")) { %>
+            		<div class="link"><a href="admin.jsp">Admin Review</a></div>
+            	<% } %>
+            <%
+	            if (userid == -1) {
+					// no user logged in
+					out.println("<div class='submitPost' onclick='openInvalidNav()'>Submit Post</div>");
 				}
-			}
+				else { // user is logged in
+					out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
+				}
+            %>
+        </div>
+        <%
 			
         
         	int post_id = Integer.parseInt(request.getParameter("postid"));
@@ -284,7 +302,15 @@
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
-                <div class = "post"></div>
+                 <% 
+	            	ArrayList<Post> trending = db.top_recent_posts(0);
+	            %>
+	            <% for(Post c: trending){
+	            	out.println("<div class='trending'>");
+	            	out.println("<div class='trendingtext'>" + c.getPostContent() + "</div>");
+	            	out.println("</div>");
+	            }
+	            %>
             </div>
         </div>
         

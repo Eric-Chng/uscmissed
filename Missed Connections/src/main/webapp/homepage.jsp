@@ -286,12 +286,12 @@
 	            <% } else if (userid != -1){ %>
 	            <div class="link"><a href = "LogoutDispatcher">Log out</a></div>
 	            <% } %>
-            
+                        <%
+            	if(usertype.contentEquals("admin")) { %>
+            		<div class="link"><a href="admin.jsp">Admin Review</a></div>
+            	<% } %>
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
-            <%
-            if(userid == -1 && usertype=="admin") { %>
-            	<div class="link"><a href="admin.jsp">Admin Review</a></div>
-            <% } %>
+
             <%
 	            if (userid == -1) {
 					// no user logged in
@@ -364,11 +364,12 @@
 	            <% 
 	            	ArrayList<Post> trending = db.top_recent_posts(0);
 	            %>
-	            <c:forEach items="${trending}" var="post"> 
-	            	<div class="trending">
-	            		<div class="trendingtext">${post.postContent}</div>
-	            	</div>
-	            </c:forEach>
+	            <% for(Post c: trending){
+	            	out.println("<div class='trending'>");
+	            	out.println("<div class='trendingtext'>" + c.getPostContent() + "</div>");
+	            	out.println("</div>");
+	            }
+	            %>
             </div>
         </div>
         <script>
