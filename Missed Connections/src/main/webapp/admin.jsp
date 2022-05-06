@@ -98,9 +98,28 @@
     </head>
     <body>
         <div id="leftSidebar">
-            <a href="homepage.jsp"><img src = "images/logo.png"></a>
+        	<a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link"><a href="homepage.jsp">Home</a></div>
-            <div class="link" id ="signin">Account Login</div>
+       		<% int userid = -1;
+		         String usertype = "";
+		         if(request.getCookies() != null){
+					Cookie[] cookies = request.getCookies();
+					for (Cookie c : cookies) {
+						if (c.getName().equals("userid")) {
+							userid = Integer.parseInt(c.getValue().trim());
+						}
+						if (c.getName().equals("usertype")) {
+							usertype = c.getValue().trim();
+						}
+					}
+		         }
+		         System.out.println(usertype);
+	   		%>
+            <% if (userid == -1) { %>
+           	 <div class="customGPlusSignIn" id="signin">Account Login</div>
+            <% } else if (userid != -1){ %>
+            	<div class="link"><a href = "LogoutDispatcher">Log out</a></div>
+            <% } %>
             <div class="link-current"><a href="admin.jsp">Admin Review</a></div>
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%-- <%
