@@ -245,6 +245,7 @@
 	                  <p><%= mycomments.get(i) %></p>
 	            </div>
            <% } %>
+        	</div>
         </div>
         
         <div id="rightSidebar">

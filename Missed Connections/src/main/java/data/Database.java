@@ -28,10 +28,10 @@ import util.TBA;
 
 public class Database {
 	
-	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
-	private static String USER = "root";
-	private static String PASSWORD = "root";
+	public static String DRIVER = "com.mysql.cj.jdbc.Driver";
+	public static String ADDRESS = "jdbc:mysql://localhost:3306/uscmissed";
+	public static String USER = "root";
+	public static String PASSWORD = "root";
 	
 	
 	//Account Validation Database Functions
@@ -269,6 +269,31 @@ public class Database {
 			Post temp = get_post(post_id, user_id);
 			result.add(temp);
 		}
+		return result;
+	}
+	
+	public ArrayList<Post> top_recent_posts(int user_id) {
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Integer> most_recent_post_id = new ArrayList<Integer>();
+		String sql = "SELECT posts.*, COUNT(likes.post_id) AS post_count FROM posts LEFT JOIN likes ON posts.post_id = likes.post_id GROUP BY posts.post_id ORDER BY post_count DESC LIMIT 5;";
+		try {
+			Class.forName(DRIVER);
+			Connection conn = DriverManager.getConnection(ADDRESS, USER, PASSWORD);
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				most_recent_post_id.add(rs.getInt("post_id"));
+				
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int post_id : most_recent_post_id) {
+			Post temp = get_post(post_id, user_id);
+			result.add(temp);
+		}
+		
 		return result;
 	}
 	

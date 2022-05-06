@@ -2,7 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@page import="java.util.*" %>
 <%@page import="util.Post" %>
+<%@page import="data.Database" %>
 <%@page import="util.User" %>
+<%@page import="javax.servlet.http.Cookie" %>
 <!DOCTYPE html>
 
 <html>
@@ -12,7 +14,42 @@
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
-        <%@ page import="java.util.ArrayList" %>
+        
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
+		  <script src="https://apis.google.com/js/api:client.js"></script>
+		 <script>
+		  var googleUser = {};
+		  var startApp = function() {
+		    gapi.load('auth2', function(){
+		      // Retrieve the singleton for the GoogleAuth library and set up the client.
+		      auth2 = gapi.auth2.init({
+		        client_id: '424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com',
+		        cookiepolicy: 'single_host_origin',
+		      });
+		      attachSignin(document.getElementById('signin'));
+		    });
+		  };
+		
+		  function attachSignin(element) {
+		    auth2.attachClickHandler(element, {},
+		        function(googleUser) {
+		    	  var email = googleUser.getBasicProfile().getEmail();
+		    	  var name = googleUser.getBasicProfile().getName().split(' ').join('=');
+		    	  var url = email.substring(email.indexOf('@') + 1);
+				  if(url != "usc.edu"){
+					  alert("The account you used is not a USC email. Please sign in with your USC email.");
+					  var auth2 = gapi.auth2.getAuthInstance();
+					  auth2.disconnect();
+				  }
+				  else {
+				  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
+				  }
+		        }, function(error) {
+		           alert("Sign in not completed, please try again.");
+		        });
+		  }
+		  </script>
         <style>
             @font-face {
                 font-family: 'Adagio Sans';
@@ -172,25 +209,34 @@
         </style>
     </head>
     <body>
-    	<% Cookie[] cookies = request.getCookies();
-   			String newname = "";
-  			boolean isLoggedIn = false;
-   			if(cookies!=null) { 
-   	   			for(Cookie aCookie : cookies) {
-   	   				if(aCookie.getName().equals("username")) {
-   	   					isLoggedIn = true; 
-   	   					break;
-   	   				}
-   	   			}
-   			} 
-   			User myuser = (User) request.getAttribute("user"); 
+
+    	<% int userid = -1;
+			String username = "";
+			String useremail = "";
+			String usertype = "";
+			Cookie[] cookies = request.getCookies();
+			for (Cookie c : cookies) {
+				if (c.getName().equals("userid")) {
+					userid = Integer.parseInt(c.getValue().trim());
+				}
+				if (c.getName().equals("username")) {
+					username = c.getValue().trim();
+				}
+				if (c.getName().equals("useremail")) {
+					useremail = c.getValue().trim();
+				}
+				if (c.getName().equals("usertype")) {
+					usertype = c.getValue().trim();
+				}
+			}
+
    		%>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link-current"><a href="homepage.jsp">Home</a></div>
-            <% if (isLoggedIn == false) { %>
+            <% if (userid == -1) { %>
             <div class="customGPlusSignIn" id="signin">Account Login</div>
-            <% } else if (isLoggedIn == true){ %>
+            <% } else if (userid != -1){ %>
             	<form action="LogoutDispatcher" method="GET">
             		<button type="submit" id="logout" value="log out">Log out</button>
             	</form>
@@ -198,7 +244,7 @@
             
             <div class="link"><a href="contact_form.jsp">Contact Us</a></div>
             <%
-            if(isLoggedIn == true && myuser.status=="admin") { %>
+            if(userid == -1 && usertype=="admin") { %>
             	<div class="link"><a href="admin.jsp">Admin Review</a></div>
             <% } %>
             <div class="submitPost">Submit Post</div>
@@ -216,43 +262,40 @@
                     </div>
                 </div>
             </div>
-            <% ArrayList<Post> myposts = (ArrayList<Post>)request.getAttribute("posts");
-            	if(myposts.isEmpty() == false) {
-            		for(int i=0; i<myposts.size(); ++i) { 
-            			int postid = myposts.get(i).post_id;
-            			String postcontent = myposts.get(i).postContent;
-            			int likes = myposts.get(i).likes;
-            			int comments = myposts.get(i).comments.size();
-            			ArrayList<String> mycomments = (ArrayList<String>)myposts.get(i).comments;
-            			boolean ifliked = myposts.get(i).likedByUser;
-            		%>
+   
+            <% Database db = new Database();
+            
+            ArrayList<Post> myposts = db.most_recent_posts(0);
+            //ArrayList<Post> myposts = (ArrayList<Post>)request.getAttribute("posts");
+            if(myposts.isEmpty() == true) { out.println("<p>No posts!</p>"); } %>
+            <c:if ${myposts.isEmpty()}=false>
+            <c:forEach items="${myposts}" var="post">        
 		            <div class="post">
-		            	<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><%=postid %></a>
+		            	<a href=<%="expand.jsp?id=" + "${post.post_id}" + "&content=" + "${post.postContent}" + "&likes=" + "${post.likes}" + "&comments=" + "${post.comments.size()}" + "&mycomments=" + "${post.comments}" + "&iflike=" + "${post.likedByUser}" %>>${post.post_id}<${post.post_id}/a>
 		                <div class="right-bubble tri-right right-in">
 		                    <div class="talktext">
-		                      <p><%=postcontent %></p>
+		                      <p>${post.postContent}</p>
 		                    </div>
 		                </div>
 		                <div class="stats">
 		                    <table>
 		                        <tr>
-		                            <td><%=likes %>
-		                            <% if(ifliked==true) { %>
-		                           		<a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-solid fa-heart"></i></button></a>
-		                                <% } else { %>
-		                                <a href=<%="expand.jsp?id=" + postid + "&content=" + postcontent + "&likes=" + likes + "&comments=" + comments + "&mycomments=" + mycomments + "&iflike=" + ifliked %>><button type="button" class="like-button"><i class="fa-regular fa-heart"></i></button></a>
-		                                <% } %>
+		                            <td>${post.likes}
+		                            <c:if ${post.likedByUser}=true>
+		                           		<a href=<%="expand.jsp?id=" + "${post.post_id}" + "&content=" + "${post.postContent}" + "&likes=" + "${post.likes}" + "&comments=" + "${post.comments.size()}" + "&mycomments=" + "${post.comments}" + "&iflike=" + "${post.likedByUser}" %>><button type="button" class="like-button"><i class="fa-solid fa-heart"></i></button></a>
+	                                </c:if> 
+	                                <c:if ${post.likedByUser}=false>
+		                                <a href=<%="expand.jsp?id=" + "${post.post_id}" + "&content=" + "${post.postContent}" + "&likes=" + "${post.likes}" + "&comments=" + "${post.comments.size()}" + "&mycomments=" + "${post.comments}" + "&iflike=" + "${post.likedByUser}" %>><button type="button" class="like-button"><i class="fa-regular fa-heart"></i></button></a>
+		                          	</c:if>
 		                                </td>
 		                            <td> </td>
-		                            <td><%=comments %><i class="fa-regular fa-comments"></i></td>
+		                            <td>${post.comments}><i class="fa-regular fa-comments"></i></td>
 		                        </tr>
 		                    </table>
 		                </div>
 		            </div>
-	            	<% } %>
-	            <% } else if (myposts.isEmpty() == true){ %>
-	            <p>No posts currently</p>
-	            <% } %>
+	            </c:forEach>
+	            </c:if>
         </div>
         <div id="rightSidebar">
             <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
