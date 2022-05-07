@@ -328,7 +328,6 @@
 	    	Database db = new Database();
 			Post post = db.get_post(postId, userid);
 			
-			
 			String postcontent = post.postContent;
 			int likes = post.likes;
 			int comments = post.comments.size();
@@ -336,6 +335,13 @@
 			boolean ifliked = post.likedByUser;
     	   %>
         <div id="main">
+        		<%
+	    		if (!(request.getParameter("error").equals("No error"))) {
+	    			out.println("<div class='error_class' style='background-color: rgba(255, 0, 0, 0.3); padding: 25px 0 25px 0px; text-align: center; border-radius: 15px'>");
+					out.println(request.getParameter("error"));
+					out.println("</div>");
+	    		}
+	    	%> 
             <div id="header">
                 <h1>Post #<%=postId%></h1>
             </div>
@@ -370,11 +376,12 @@
            	
             <p id="comments-header">Comments</p>
             <form action="Comment" method="POST">
+            <input type="hidden" name="post_id" value="<%=postId%>" />
 	           <div class="right-bubble tri-right right-in">
 	               <div class="talktext">
 	                   <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
 	                   <div class="submit-button">
-	                       <button name="comment_post_id" value="<%=postId%>" type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+	                       <button name="comment_post_id" type="submit"><i class="fa-regular fa-paper-plane"></i></button>
 	                   </div>
 	               </div>
 	           </div>
