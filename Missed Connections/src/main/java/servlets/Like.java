@@ -30,8 +30,9 @@ public class Like extends HttpServlet {
 			}
 		}
 		
-		String error=null;
+		String error="No error";
 		int id = Integer.parseInt(request.getParameter("post_id"));
+		request.setAttribute("postid", id);
 		
 		if (user_id == -1) {
 			//no user logged in
@@ -40,21 +41,20 @@ public class Like extends HttpServlet {
 		}
 		else {
 			//Getting current post; 	
-//			Post post = db.get_post(id, user_id);
-			request.setAttribute("postid", id);
+			Post post = db.get_post(id, user_id);
 			
 			//Check if unliked, then adds like to database table
 			if (db.if_user_liked(id, user_id) == 0) {
 				db.user_liked_post(id, user_id);
 			}
-//			
-//			//Updating post in request
-//			request.setAttribute("post", db.get_post(post.post_id, user_id));
+			
+			//Updating post in request
+			request.setAttribute("post", db.get_post(post.post_id, user_id));
 		}
 				
 		//Redirect to ViewPost servlet
-//		response.sendRedirect("expand.jsp" + "?postid=" + id);
-		request.getRequestDispatcher("/expand.jsp").forward(request, response);
+		response.sendRedirect("expand.jsp" + "?postid=" + id + "&error=" + error);
+//		request.getRequestDispatcher("expand.jsp").forward(request, response);
 	}
 
 }

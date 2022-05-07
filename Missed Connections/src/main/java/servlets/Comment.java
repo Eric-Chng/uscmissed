@@ -19,8 +19,7 @@ public class Comment extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Database db = new Database();
-		
-		//Getting current user
+
 		int user_id = -1;
 		Cookie cookies[] = request.getCookies();
 		for (Cookie c : cookies) {
@@ -30,35 +29,32 @@ public class Comment extends HttpServlet {
 			}
 		}
 		
-		String error=null;
-		int id = Integer.parseInt(request.getParameter("comment_post_id"));
+		String error="No error";
+		int id = Integer.parseInt(request.getParameter("post_id"));
+		request.setAttribute("postid", id);
 		
 		if (user_id == -1) {
 			//no user logged in
 			error="User is not logged in. Cannot comment.";
 			request.setAttribute("error", error);
 		}
-		else {
+		else {			
+			//Getting current post; 	
+			Post post = db.get_post(id, user_id);
+			
 			//Getting comment
 			String comment = request.getParameter("comment");
-			
-			System.out.println(comment);
-			
-			//Getting current post 
-			System.out.println(id);
-			
-			System.out.println("User");
-			System.out.println(user_id);
 			
 			//Adding comment to database
 			db.addComment(id, user_id, comment);
 			
 			//Updating post in request
-			request.setAttribute("post", db.get_post(id, user_id));
-			request.setAttribute("postid", id);
+			request.setAttribute("post", db.get_post(post.post_id, user_id));
 		}
+				
 		//Redirect to ViewPost servlet
-		response.sendRedirect("expand.jsp" + "?postid=" + id);
+		response.sendRedirect("expand.jsp" + "?postid=" + id + "&error=" + error);
+//		request.getRequestDispatcher("expand.jsp").forward(request, response);
 	}
 }
 
