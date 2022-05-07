@@ -68,7 +68,7 @@ public class Database {
 			statement.setInt(1, user_id);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			result = rs.getString("content");
+			result = rs.getString("name");
 			conn.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
