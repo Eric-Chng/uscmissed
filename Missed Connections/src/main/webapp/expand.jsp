@@ -301,6 +301,7 @@
     
     %>
         <div id="leftSidebar">
+            <script>startApp();</script>
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
             <div class="link"><a href="homepage.jsp">Home</a></div>
             <% if (userid == -1) { %>
