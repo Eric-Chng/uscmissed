@@ -36,6 +36,7 @@ body {
 	background-color: #D56262;
 	border: none;
 	color: white;
+	font-family: 'Adagio Sans';
 }
 ::placeholder {
 	color: white;
@@ -52,6 +53,7 @@ body {
 	border: none;
 	color: white;
 	text-align: left;
+	font-family: 'Adagio Sans';
 }
 #submit_post_button, #reset_post_button {
 	background-color: #D56262;
@@ -60,6 +62,7 @@ body {
 	border: none;
 	padding: 8px 12px 8px 12px;
 	border-radius: 300px;
+	font-family: 'Adagio Sans';
 }
 select {
 	color: white;

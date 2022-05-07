@@ -105,10 +105,12 @@
 			background-color: #FFF7F0;
 			resize: none;
 			color: #D56262;
+			font-family: 'Adagio Sans';
 		}
 		input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
 			outline:  none !important;
 			border: 1px solid #D56262;
+			font-family: 'Adagio Sans';
 		}
 		button {
 			border: 1px solid #D56262;
@@ -314,7 +316,7 @@
 						<textarea id="comment" name="comment" style="padding-bottom: 80px; border-radius: 30px; padding-left:20px; padding-right:20px; padding-top: 10px; margin-bottom: 10px"></textarea>
 					</div>
 					<div class="centered" >
-						<button type="submit">Submit</button>
+						<button type="submit" style="color: #D56262">Submit</button>
 					</div>
 				</form>
 			<!-- </div> -->
