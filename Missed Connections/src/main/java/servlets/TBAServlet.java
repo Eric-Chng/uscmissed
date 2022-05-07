@@ -35,7 +35,7 @@ public class TBAServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String post_comment = request.getParameter("post_comment");
+		String post_comment = request.getParameter("newpost");
 		String hashtag = request.getParameter("hashtag");
 		
 		System.out.println(post_comment);
