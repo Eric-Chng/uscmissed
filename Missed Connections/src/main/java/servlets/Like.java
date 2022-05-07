@@ -53,7 +53,7 @@ public class Like extends HttpServlet {
 		}
 				
 		//Redirect to ViewPost servlet
-		response.sendRedirect("expand.jsp" + "?postid=" + id);
+		request.getRequestDispatcher("/expand.jsp").forward(request, response);
 	}
 
 }
