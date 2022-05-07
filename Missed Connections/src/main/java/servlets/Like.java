@@ -41,7 +41,7 @@ public class Like extends HttpServlet {
 		else {
 			//Getting current post; 	
 			Post post = db.get_post(id, user_id);
-			
+			request.setAttribute("postid", id);
 			
 			//Check if unliked, then adds like to database table
 			if (db.if_user_liked(post.post_id, user_id) == 0) {
@@ -53,6 +53,7 @@ public class Like extends HttpServlet {
 		}
 				
 		//Redirect to ViewPost servlet
+//		response.sendRedirect("expand.jsp" + "?postid=" + id);
 		request.getRequestDispatcher("/expand.jsp").forward(request, response);
 	}
 
