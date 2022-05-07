@@ -359,7 +359,7 @@
         			boolean ifliked = myposts.get(i).likedByUser;
         			
 	            out.println("<div class='post'>");
-	            	out.println("<a class='post-title' href='expand.jsp?postid=" + postid + "'> Post #" + postid + " </a>");
+	            	out.println("<a class='post-title' href='expand.jsp?postid=" + postid + "&error=No error" + "'> Post #" + postid + " </a>");
 	                out.println("<div class='right-bubble tri-right right-in'>");
 	                    out.println("<div class='talktext'>");
 	                      out.println("<p>" + postcontent + "</p>");
