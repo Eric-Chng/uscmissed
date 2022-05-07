@@ -238,17 +238,16 @@
             %>
         </div>
         <%
-			
-        
-        	int postId = Integer.parseInt(request.getParameter("postid"));
-        	Database db = new Database();
+       	 	int postId = Integer.parseInt(request.getParameter("postid"));
+	    	Database db = new Database();
 			Post post = db.get_post(postId, userid);
-					
-    		String postcontent = post.postContent;
-    		int likes = post.likes;
-    		int comments = post.comments.size();
-    		ArrayList<String> mycomments = (ArrayList<String>)post.comments;
-    		boolean ifliked = post.likedByUser;
+			
+			
+			String postcontent = post.postContent;
+			int likes = post.likes;
+			int comments = post.comments.size();
+			ArrayList<String> mycomments = (ArrayList<String>)post.comments;
+			boolean ifliked = post.likedByUser;
     	   %>
         <div id="main">
             <div id="header">
@@ -289,7 +288,7 @@
 	               <div class="talktext">
 	                   <textarea id="comment-content" name="comment" placeholder="Type your comment here"></textarea>
 	                   <div class="submit-button">
-	                       <button type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+	                       <button name="comment_post_id" value="<%=postId%>" type="submit"><i class="fa-regular fa-paper-plane"></i></button>
 	                   </div>
 	               </div>
 	           </div>
