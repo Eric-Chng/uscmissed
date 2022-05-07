@@ -40,16 +40,16 @@ public class Like extends HttpServlet {
 		}
 		else {
 			//Getting current post; 	
-			Post post = db.get_post(id, user_id);
+//			Post post = db.get_post(id, user_id);
 			request.setAttribute("postid", id);
 			
 			//Check if unliked, then adds like to database table
-			if (db.if_user_liked(post.post_id, user_id) == 0) {
-				db.user_liked_post(post.post_id, user_id);
+			if (db.if_user_liked(id, user_id) == 0) {
+				db.user_liked_post(id, user_id);
 			}
-			
-			//Updating post in request
-			request.setAttribute("post", db.get_post(post.post_id, user_id));
+//			
+//			//Updating post in request
+//			request.setAttribute("post", db.get_post(post.post_id, user_id));
 		}
 				
 		//Redirect to ViewPost servlet
