@@ -232,6 +232,9 @@
 			    border: none;
 			    outline: none;
 			}
+			.error_class {
+			
+			}
         </style>
     </head>
     <body>
@@ -322,6 +325,13 @@
             %>
         </div>
         <div id="main">
+	        <%
+	    		if (request.getAttribute("error") != null) {
+	    			out.println("<div class='error_class' style='background-color: rgba(255, 0, 0, 0.3); padding: 25px 0 25px 0px; text-align: center; border-radius: 15px'>");
+					out.println(request.getAttribute("error"));
+					out.println("</div>");
+	    		}
+	    	%>
             <div id="header">
                 <h1>Home</h1>
             </div>
