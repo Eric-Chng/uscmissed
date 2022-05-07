@@ -218,6 +218,20 @@
            #post-content::placeholder {
                 color: white;
            }
+           #search_field {
+			    background: #D56262;
+			    color: white;
+			    font-family: 'Adagio Sans';
+				border-radius: 25px;
+				height: 5vh;
+				width: 16vw;
+			    margin-top: 6vh;
+			    margin-left: 4.5vw;
+				border: 0;
+			    padding-left: 1.5vw;
+			    border: none;
+			    outline: none;
+			}
         </style>
     </head>
     <body>
