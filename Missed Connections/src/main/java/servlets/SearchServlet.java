@@ -53,6 +53,7 @@ public class SearchServlet extends HttpServlet {
 //		temp = db.search_hashtag(search_field, user.user_id);
 //		request.setAttribute("post_arraylist", temp);
 		request.setAttribute("search_field", search_field);
+		System.out.println(search_field);
 		request.getRequestDispatcher("/search.jsp").forward(request, response);
 	}
 
