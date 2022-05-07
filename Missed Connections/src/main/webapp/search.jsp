@@ -351,7 +351,7 @@
             }
         }
        	else {
-           	out.println("<p class='error'>No results for " + searchtitle + " currently</p>");
+           	out.println("<p class='error'>No results for " + search_field + " currently</p>");
         } %>
         
         <div id="rightSidebar">
