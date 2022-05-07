@@ -17,6 +17,42 @@
         </title>
         <script src="https://kit.fontawesome.com/51b017a2ee.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/sidebar.css">
+        <link rel="stylesheet" href="css/overlay.css">
+		<link rel="stylesheet" href="css/noPostOverlay.css">
+		        <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com">
+		  <script src="https://apis.google.com/js/api:client.js"></script>
+		 <script>
+		  var googleUser = {};
+		  var startApp = function() {
+		    gapi.load('auth2', function(){
+		      // Retrieve the singleton for the GoogleAuth library and set up the client.
+		      auth2 = gapi.auth2.init({
+		        client_id: '424408738453-c9qt61qb2pfac1rk37s7mpda1gfksef4.apps.googleusercontent.com',
+		        cookiepolicy: 'single_host_origin',
+		      });
+		      attachSignin(document.getElementById('signin'));
+		    });
+		  };
+		
+		  function attachSignin(element) {
+		    auth2.attachClickHandler(element, {},
+		        function(googleUser) {
+		    	  var email = googleUser.getBasicProfile().getEmail();
+		    	  var name = googleUser.getBasicProfile().getName().split(' ').join('=');
+		    	  var url = email.substring(email.indexOf('@') + 1);
+				  if(url != "usc.edu"){
+					  alert("The account you used is not a USC email. Please sign in with your USC email.");
+					  var auth2 = gapi.auth2.getAuthInstance();
+					  auth2.disconnect();
+				  }
+				  else {
+				  	   window.location.href = "GoogleDispatcher?name="+name+"&email="+email;
+				  }
+		        }, function(error) {
+		        });
+		  }
+		  </script>
         <style>
         	@font-face {
                 font-family: 'Adagio Sans';
@@ -202,7 +238,43 @@
         </style>
     </head>
     <body>
-    
+    <div id="submit_post" class="overlay">
+				<a href="javascript:void(0)" class="closebtn" onclick="closeValidNav()"><i class="fa-solid fa-x fa-2x" style="color: #D56262; float: right; margin: 20px"></i></a>
+				<div class="overlay-content">
+					<div class="new_post_header">
+						<h1>New Post</h1>
+					</div>
+					<form action="TBAServlet" method="GET">
+						<div class="submit_post_row">
+							<textarea id="post_comment" placeholder="Write" name="post_comment" required></textarea>
+						</div>
+						<div class="submit_post_row">
+							<input type="text" id="hashtag_submit_post" name="hashtag" placeholder="#CSCI201 #SAL">
+						</div>
+						<div class="submit_post_row" style="text-align:right">
+							<button type="submit" id="submit_post_button">Submit</button>
+							<button type="reset" id="reset_post_button">Reset</button>
+						</div>
+					</form>
+					<!-- ***********"POST SUBMITTED" APPEARS WHEN FORM SUBMITTED********** -->
+		<%-- 			<%
+						if (! get_post_comment(postId).equalsTo(null)) {
+							out.println("<h3>Post Submitted!</h3>");
+						}
+					%> --%>
+				</div>
+			</div>
+			
+			<div id="noSubmitPost" class="overlay">
+				<a href="javascript:void(0)" class="closebtn" onclick="closeInvalidNav()"><i class="fa-solid fa-x fa-2x" style="color: #D56262; float: right; margin: 20px"></i></a>
+				<div class="noPost-overlay-content">
+					<!-- <h1 style="padding-top:45px">Please log in to post.</h1> -->
+					<h1 style="padding-top:30px">Please log in to post.</h1>
+					<i class="fa-solid fa-face-frown fa-lg"></i>
+				</div>
+			</div>
+			<!-- END OF OVERLAY --> 
+		
     <% 
     int userid = -1;
 	String username = "";
@@ -230,7 +302,7 @@
     %>
         <div id="leftSidebar">
             <a href="homepage.jsp"><img src = "images/logo.png"></a>
-            <div class="link-current"><a href="homepage.jsp">Home</a></div>
+            <div class="link"><a href="homepage.jsp">Home</a></div>
             <% if (userid == -1) { %>
 	            <div class="customGPlusSignIn" id="signin">Account Login</div>
 	            <% } else if (userid != -1){ %>
@@ -337,6 +409,19 @@
 	            %>
             </div>
         </div>
-        
+        <script>
+			function openValidNav() {
+			  document.getElementById("submit_post").style.width = "100%";
+			}
+			function closeValidNav() {
+			  document.getElementById("submit_post").style.width = "0%";
+			}
+			function openInvalidNav() {
+				document.getElementById("noSubmitPost").style.width = "100%";
+			}
+			function closeInvalidNav() {
+				document.getElementById("noSubmitPost").style.width = "0%";
+			}
+		</script>
     </body>
 </html>

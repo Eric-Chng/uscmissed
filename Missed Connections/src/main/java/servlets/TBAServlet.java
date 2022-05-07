@@ -68,12 +68,15 @@ public class TBAServlet extends HttpServlet {
 				usertype = c.getValue().trim();
 			}
 		}
+		String error=null;
 		if (userid == -1) {
 			//no user logged in
+			error="User is not logged in. Cannot post.";
+			request.setAttribute("error", error);
 		}
-		
-		db.addPost(temp, userid);
-		
+		else {
+			db.addPost(temp, userid);
+		}
 		request.getRequestDispatcher("/homepage.jsp").forward(request, response);
 		
 	}

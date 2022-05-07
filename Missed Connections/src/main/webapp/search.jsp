@@ -218,6 +218,20 @@
            #post-content::placeholder {
                 color: white;
            }
+            #search_field {
+			    background: #D56262;
+			    color: white;
+			    font-family: 'Adagio Sans';
+				border-radius: 25px;
+				height: 5vh;
+				width: 16vw;
+			    margin-top: 6vh;
+			    margin-left: 4.5vw;
+				border: 0;
+			    padding-left: 1.5vw;
+			    border: none;
+			    outline: none;
+		    }
         </style>
     </head>
     <body>
@@ -355,7 +369,9 @@
         } %>
         
         <div id="rightSidebar">
-            <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+        	<form action="SearchServlet" method="GET">
+            	<input type="text" id="search_field" placeholder="Search.." name="search_field"><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+            </form>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
 	            <% 
