@@ -21,38 +21,44 @@ public class Comment extends HttpServlet {
 		Database db = new Database();
 		
 		//Getting current user
-		User user = null;
+		int user_id = -1;
 		Cookie cookies[] = request.getCookies();
 		for (Cookie c : cookies) {
 			if (c.getName().equals("userid")) {
-				user = db.get_user_data(Integer.parseInt(c.getValue()));
+//				user_id = db.get_user_data(Integer.parseInt(c.getValue()));
+				user_id = Integer.parseInt(c.getValue().trim());
 			}
 		}
 		
-		
-		//Getting comment
-		String comment = request.getParameter("comment");
-		
-		System.out.println(comment);
-		
-		//Getting current post 
+		String error=null;
 		int id = Integer.parseInt(request.getParameter("comment_post_id"));
-		System.out.println(id);
 		
-		System.out.println("User");
-		System.out.println(user);
-		
-		//Adding comment to database
-		db.addComment(id, user.user_id, comment);
-		
-		//Updating post in request
-		request.setAttribute("post", db.get_post(id, user.user_id));
-		request.setAttribute("postid", id);
-//		
+		if (user_id == -1) {
+			//no user logged in
+			error="User is not logged in. Cannot comment.";
+			request.setAttribute("error", error);
+		}
+		else {
+			//Getting comment
+			String comment = request.getParameter("comment");
+			
+			System.out.println(comment);
+			
+			//Getting current post 
+			System.out.println(id);
+			
+			System.out.println("User");
+			System.out.println(user_id);
+			
+			//Adding comment to database
+			db.addComment(id, user_id, comment);
+			
+			//Updating post in request
+			request.setAttribute("post", db.get_post(id, user_id));
+			request.setAttribute("postid", id);
+		}
 		//Redirect to ViewPost servlet
 		response.sendRedirect("expand.jsp" + "?postid=" + id);
-		
-		
 	}
 }
 
