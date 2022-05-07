@@ -305,16 +305,16 @@
 				else { // user is logged in
 					out.println("<div class='submitPost' onclick='openValidNav()'>Submit Post</div>");
 				}
-            	String searchtitle = request.getParameter("hashtag");
+            	String search_field = request.getParameter("search_field");
             %>
         </div>
         <div id="main">
             <div id="header">
-                <h1>Search results for <%=searchtitle %></h1>
+                <h1>Search results for <%=search_field %></h1>
             </div>
    		</div>
             <% Database db = new Database();
-            ArrayList<Post> myposts = db.search_hashtags(searchtitle, userid);
+            ArrayList<Post> myposts = db.search_hashtags(search_field, userid);
         	if(myposts.isEmpty() == false) {
         		for(int i=0; i<myposts.size(); ++i) { 
         			int postid = myposts.get(i).post_id;
@@ -351,7 +351,7 @@
             }
         }
        	else {
-           	out.println("<p class='error'>No results for " + searchtitle + " currently</p>");
+           	out.println("<p class='error'>No results for " + search_field + " currently</p>");
         } %>
         
         <div id="rightSidebar">
