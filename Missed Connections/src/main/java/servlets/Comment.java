@@ -24,25 +24,33 @@ public class Comment extends HttpServlet {
 		User user = null;
 		Cookie cookies[] = request.getCookies();
 		for (Cookie c : cookies) {
-			if (c.getName().equals("user_id")) {
+			if (c.getName().equals("userid")) {
 				user = db.get_user_data(Integer.parseInt(c.getValue()));
 			}
 		}
 		
-		//Getting current post 
-		Post post = (Post) request.getAttribute("post");
 		
 		//Getting comment
-		String comment = request.getParameter("comment-content");
+		String comment = request.getParameter("comment");
+		
+		System.out.println(comment);
+		
+		//Getting current post 
+		int id = Integer.parseInt(request.getParameter("comment_post_id"));
+		System.out.println(id);
+		
+		System.out.println("User");
+		System.out.println(user);
 		
 		//Adding comment to database
-		db.addComment(post.post_id, user.user_id, comment);
+		db.addComment(id, user.user_id, comment);
 		
 		//Updating post in request
-		request.setAttribute("post", db.get_post(post.post_id, user.user_id));
-		
+		request.setAttribute("post", db.get_post(id, user.user_id));
+		request.setAttribute("postid", id);
+//		
 		//Redirect to ViewPost servlet
-		response.sendRedirect("expand.jsp");
+		response.sendRedirect("expand.jsp" + "?postid=" + id);
 		
 		
 	}
