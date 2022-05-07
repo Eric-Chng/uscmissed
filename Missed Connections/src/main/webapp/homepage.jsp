@@ -199,6 +199,11 @@
                 margin-right: 2.5vw;
                 color: #FDBB63;
             }
+            .error {
+            	font-size: 1.4em;
+            	margin-left: 42vw;
+            	
+            }
             #post-content {
                width: 38vw;
                height: auto;
@@ -354,7 +359,7 @@
             }
         }
        	else {
-           	out.println("<p>No posts currently</p>");
+           	out.println("<p class='error'>No posts currently</p>");
         } %>
         
         <div id="rightSidebar">
