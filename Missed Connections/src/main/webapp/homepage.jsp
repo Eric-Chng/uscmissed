@@ -390,7 +390,9 @@
         
         <div id="rightSidebar">
         	<form action="SearchServlet" method="GET">
-            	<input type="text" id="search_field" placeholder="Search.." name="search_field"><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+            
+            	<input type="text" id="search_field" name="search_field" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+
             </form>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
