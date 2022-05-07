@@ -336,9 +336,12 @@
     	   %>
         <div id="main">
         		<%
-	    		if (!(request.getParameter("error").equals("No error"))) {
+        		if(request.getParameter("error").equals("No error")) {
+        			// Do nothing
+        		}
+        		else {
 	    			out.println("<div class='error_class' style='background-color: rgba(255, 0, 0, 0.3); padding: 25px 0 25px 0px; text-align: center; border-radius: 15px'>");
-					out.println(request.getParameter("error"));
+	    			out.println(request.getParameter("error"));
 					out.println("</div>");
 	    		}
 	    	%> 
