@@ -218,6 +218,20 @@
            #post-content::placeholder {
                 color: white;
            }
+           #search_field {
+			    background: #D56262;
+			    color: white;
+			    font-family: 'Adagio Sans';
+				border-radius: 25px;
+				height: 5vh;
+				width: 16vw;
+			    margin-top: 6vh;
+			    margin-left: 4.5vw;
+				border: 0;
+			    padding-left: 1.5vw;
+			    border: none;
+			    outline: none;
+			}
         </style>
     </head>
     <body>
@@ -311,15 +325,17 @@
             <div id="header">
                 <h1>Home</h1>
             </div>
-            <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
-            <div class="left-bubble tri-right left-in">
-                <div class="talktext">
-                    <textarea id="post-content" name="newpost" placeholder="Type your submission here"></textarea>
-                    <div class="submit-box">
-                        <button type="submit" id="submit-button"><i class="fa-regular fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
+            <form action="TBAServlet" method="GET">
+	            <!-- Chat bubble credits to: https://codepen.io/Founts/pen/AJyVOr?editors=1100 -->
+	            <div class="left-bubble tri-right left-in">
+	                <div class="talktext">
+	                    <textarea id="post-content" name="newpost" placeholder="Type your submission here"></textarea>
+	                    <div class="submit-box">
+	                        <button type="submit" id="submit-button"><i class="fa-regular fa-paper-plane"></i></button>
+	                    </div>
+	                </div>
+	            </div>
+            </form>
    </div>
             <% Database db = new Database();
             ArrayList<Post> myposts = db.most_recent_posts(0);
@@ -363,7 +379,9 @@
         } %>
         
         <div id="rightSidebar">
-            <input type="text" id="searchbar" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+        	<form action="SearchServlet" method="GET">
+            	<input type="text" id="search_field" placeholder="Search.."><button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+            </form>
             <div class = "staticText">Trending Posts</div>
             <div class = "trendingContainer">
 	            <% 
