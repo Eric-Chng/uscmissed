@@ -31,6 +31,12 @@ In Import from Disk tab,
 - Run the homepage via the Tomcat Server.
 
 
-
-Multithreading:
-- Connection to remote mySql servlet is required. Connect to http://localhost port number, 
+## Multithreading:
+- Connection to remote mySql servlet is required.    
+- To do so, go to the data package and the Database.java file. Replace lines 31 to 35 with the following
+```java
+public static String DRIVER = "com.mysql.cj.jdbc.Driver";
+public static String ADDRESS = "jdbc:mysql://remotemysql.com:3306/iMErdiDE0y";
+public static String USER = "iMErdiDE0y";
+public static String PASSWORD = "kILr3e0bxa";
+ ```
