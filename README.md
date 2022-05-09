@@ -1,7 +1,7 @@
-# USC Missed Connections
+# USC Missed Connections Deployment Documentation
 By Eric Cheng, Raymond Kuan, Tim Lin, Cate Jung, Melanie Toh, and Ronak Pai
 
-Deployment Document
+
 
 
 
