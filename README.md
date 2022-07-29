@@ -1,10 +1,15 @@
-# USC Missed Connections Deployment Documentation
+# USC Missed Connections
 By Eric Cheng, Raymond Kuan, Tim Lin, Cate Jung, Melanie Toh, and Ronak Pai
 
 ### USC Missed Connections Project
 Students often meet people they find interesting but lack the courage to spark a longer conversation that might blossom into a genuine friendship. Our app aims to give students a chance to find connections they might have otherwise missed. Our anonymous message board allows students to post safely about people they wish they could connect to. There's comment systems, likes, and a daily recommended feed, all designed to maximize chances students have to connect.
 
-# Setup the Database locally:
+
+
+# Deploying the project
+We lacked the funds to host remotely, but the project can be viewed locally.
+
+## Setup the Database locally:
 
 Open MySQLWorkbench
 
@@ -26,14 +31,14 @@ In Import from Disk tab,
 
 
 
-# Running the Webpage:
+## Running the Webpage:
 - After the setup of the database, the homepage can be accessed at http://localhost:8079/A2/homepage.jsp
 - Apache Tomcat Servers must be attached prior to website execution. This project uses Apache Tomcat 9.0 
 - Jar files must be attached (should be already attached when project is downloaded). Ensure both javax.servlets.jar and well as the mysql_connector.jar are both attached.
 - Run the homepage via the Tomcat Server.
 
 
-## Multithreading:
+### Multithreading:
 - Connection to remote mySql servlet is required.    
 - To do so, go to the data package and the Database.java file. Replace lines 31 to 35 with the following
 ```java
