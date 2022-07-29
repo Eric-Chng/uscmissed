@@ -1,6 +1,8 @@
 # USC Missed Connections Deployment Documentation
 By Eric Cheng, Raymond Kuan, Tim Lin, Cate Jung, Melanie Toh, and Ronak Pai
 
+### USC Missed Connections Project
+Students often meet people they find interesting but lack the courage to spark a longer conversation that might blossom into a genuine friendship. Our app aims to give students a chance to find connections they might have otherwise missed. Our anonymous message board allows students to post safely about people they wish they could connect to. There's comment systems, likes, and a daily recommended feed, all designed to maximize chances students have to connect.
 
 # Setup the Database locally:
 
